@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- jQuery -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+		/>
+		<!-- box icon -->
+		<link
+			href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" th:href="@{/static/css/admin.css}" />
+		<!-- <link rel="stylesheet" href="../static/css/admin.css" /> -->
+		<title>sStore | Admin</title>
+	</head>
+	<body>
+		<section th:replace="adminDashboard :: adminSidebar"></section>
+		<section id="content">
+			<nav th:replace="adminDashboard :: adminNavbar"></nav>
+			<!-- Main content -->
+			<main>
+				<div class="head-title">
+					<div class="left">
+						<a th:href="@{/sStore/admin/store}"
+							><h1>My Store</h1></a
+						>
+						<p class="breadcrumb">Manage all your products</p>
+					</div>
+					<button
+						class="newPrd"
+						data-bs-toggle="modal"
+						data-bs-target="#newProduct"
+					>
+						<span class="btn_icon"
+							><i class="bx bx-plus-circle"></i
+						></span>
+						<span class="btn_text">New Product</span>
+					</button>
+				</div>
+				<div class="table-data">
+					<div class="order">
+						<div class="head">
+							<h3>Products</h3>
+							<form
+								th:action="@{/sStore/admin/store}"
+								method="get"
+								id="form-search"
+							>
+								<div
+									class="d-flex justify-content-center form-search"
+								>
+									<input
+										class="mx-1"
+										type="text"
+										placeholder="Search..."
+										name="search"
+									/>
+									<i
+										class="bx bx-search me-3"
+										id="btnSearch"
+									></i>
+									<div id="filter">
+										<i
+											class="bx bx-filter"
+											id="btnFilter"
+										></i>
+										<div class="menu">
+											<a
+												th:href="@{/sStore/admin/store/(filterMode=1)}"
+												><i class="bx bx-up-arrow-alt"
+													>Price
+												</i></a
+											>
+											<a
+												th:href="@{/sStore/admin/store/(filterMode=2)}"
+												><i class="bx bx-down-arrow-alt"
+													>Price
+												</i></a
+											>
+											<a
+												th:href="@{/sStore/admin/store/(filterMode=3)}"
+												><i class="bx bx-up-arrow-alt"
+													>Date Create
+												</i></a
+											>
+											<a
+												th:href="@{/sStore/admin/store/(filterMode=4)}"
+												><i class="bx bx-down-arrow-alt"
+													>Date Create
+												</i></a
+											>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+						<table>
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Price</th>
+									<th>Branch</th>
+									<th>Date Create</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody th:each="product : ${products}">
+								<tr>
+									<td>
+										<p th:text="${product.productName}">
+											Name of product
+										</p>
+									</td>
+									<td>
+										<span
+											th:text="|${product.price}&#8363;|"
+											>Price of product</span
+										>
+									</td>
+									<td>
+										<span th:text="${product.branch}"
+											>Branch</span
+										>
+									</td>
+									<td>
+										<span th:text="${product.createAt}"
+											>Date create product</span
+										>
+									</td>
+									<td>
+										<a
+											th:href="@{/sStore/admin/viewProduct/(id=${product.id})}"
+											class="btn btn-primary me-2 viewBtn"
+											><i class="bx bx-detail"></i
+										></a>
+										<a
+											th:href="@{/sStore/admin/viewProduct/(id=${product.id})}"
+											class="btn btn-warning me-2 editBtn"
+											><i class="bx bx-pencil"></i
+										></a>
+										<a
+											th:href="@{/sStore/admin/delProduct/{pid}(pid = ${product.id})}"
+											class="btn btn-danger delBtn"
+											><i class="bx bx-trash-alt"></i
+										></a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</main>
+		</section>
+		<!-- Modal  -->
+		<!-- New Product Modal -->
+		<div
+			class="modal fade"
+			id="newProduct"
+			tabindex="-1"
+			aria-labelledby="newProduct"
+			aria-hidden="true"
+		>
+			<div class="modal-dialog modal-xl">
+				<div class="modal-content">
+					<form
+						th:action="@{/sStore/admin/newProduct}"
+						method="post"
+						enctype="multipart/form-data"
+					>
+						<div class="container m-0 py-3 px-0">
+							<div class="row px-3 py-3">
+								<h3 class="font-weight-bold">New Product</h3>
+							</div>
+							<div class="row g-0">
+								<!-- Product Image -->
+								<div class="col-lg-auto ps-3">
+									<div class="card">
+										<div class="top">
+											<p>Drag & drop image uploading</p>
+										</div>
+										<div id="new_form_image">
+											<span class="new_inner"
+												>Drag & drop image here or
+												<span class="new_select"
+													>Browse</span
+												>
+											</span>
+											<input
+												type="file"
+												name="files"
+												class="files"
+												multiple
+												accept="image/*"
+											/>
+										</div>
+										<div class="new_image_container">
+											<!-- <div class="image">
+												<img
+													src="../static/image/fashion1.jpg"
+													class="w-100"
+													alt="image"
+												/>
+											<span>&times;</span>
+											</div> -->
+										</div>
+									</div>
+								</div>
+								<!-- Product information -->
+								<div class="col-lg-7 flex-grow-1 px-5">
+									<div class="row">
+										<div class="col-lg-4 pb-2">
+											<label
+												for="productName"
+												class="form-label"
+												>Name</label
+											>
+											<input
+												type="text"
+												class="form-control"
+												required
+												name="productName"
+												id="productName"
+											/>
+										</div>
+										<div class="col-lg-4 pb-2">
+											<label
+												for="price"
+												class="form-label"
+												>Price</label
+											>
+											<input
+												type="number"
+												class="form-control"
+												required
+												name="price"
+												id="price"
+												min="0"
+											/>
+										</div>
+										<div class="col-lg-4 pb-2">
+											<label
+												for="branch"
+												class="form-label"
+												>Branch</label
+											>
+											<input
+												type="text"
+												class="form-control"
+												name="branch"
+												id="branch"
+											/>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-12 py-2">
+											<label
+												for="description"
+												class="form-label"
+												>Description</label
+											>
+											<textarea
+												class="form-control"
+												id="description"
+												rows="3"
+												name="description"
+											></textarea>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-4 py-2">
+											<label
+												for="available"
+												class="form-label"
+												>Available</label
+											>
+											<input
+												type="number"
+												class="form-control"
+												required
+												name="available"
+												id="available"
+												min="0"
+											/>
+										</div>
+										<div class="col-lg-4 py-2">
+											<label
+												for="gender"
+												class="form-label"
+												>Product For</label
+											>
+											<select
+												class="form-select"
+												id="gender"
+												name="gender"
+											>
+												<option value="1" selected>
+													Men
+												</option>
+												<option value="0">Women</option>
+											</select>
+										</div>
+										<div class="col-lg-4 py-2">
+											<label for="type" class="form-label"
+												>Type</label
+											>
+											<select
+												class="form-select"
+												name="type"
+												id="type"
+											>
+												<option
+													value="T-Shirt"
+													selected
+												>
+													T-Shirt
+												</option>
+												<option value="Jean">
+													Jean
+												</option>
+											</select>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-6 py-2">
+											<label
+												for="sizes"
+												class="form-label"
+												>Product Sizes</label
+											>
+											<select
+												class="form-select"
+												multiple
+												name="new_sizes"
+											>
+												<optgroup label="Clothing Size">
+													<option value="XS">
+														XS
+													</option>
+													<option value="S">S</option>
+													<option value="M">M</option>
+													<option value="L">L</option>
+													<option value="XL">
+														XL
+													</option>
+													<option value="XXL">
+														XXL
+													</option>
+													<option value="3X">
+														3X
+													</option>
+													<option value="4X">
+														4X
+													</option>
+												</optgroup>
+												<optgroup label="Shoe Size">
+													<option value="35">
+														35
+													</option>
+													<option value="36">
+														36
+													</option>
+													<option value="37">
+														37
+													</option>
+													<option value="38">
+														38
+													</option>
+													<option value="39">
+														39
+													</option>
+													<option value="40">
+														40
+													</option>
+													<option value="41">
+														41
+													</option>
+													<option value="42">
+														42
+													</option>
+													<option value="43">
+														43
+													</option>
+													<option value="44">
+														44
+													</option>
+													<option value="45">
+														45
+													</option>
+												</optgroup>
+											</select>
+										</div>
+										<div class="col-lg-6 py-2">
+											<label
+												for="colors"
+												class="form-label"
+												>Product Colors</label
+											>
+											<select
+												class="form-select"
+												id="colors"
+												multiple
+												name="new_colors"
+											>
+												<option value="Blue">
+													Blue
+												</option>
+												<option value="Green">
+													Green
+												</option>
+												<option value="Brown">
+													Brown
+												</option>
+												<option value="Grey">
+													Grey
+												</option>
+												<option value="Red">Red</option>
+												<option value="White">
+													White
+												</option>
+												<option value="Pink">
+													Pink
+												</option>
+												<option value="Yellow">
+													Yellow
+												</option>
+												<option value="Black">
+													Black
+												</option>
+												<option value="Beige">
+													Beige
+												</option>
+												<option value="Navy Blue">
+													Navy Blue
+												</option>
+												<option value="Maroon">
+													Maroon
+												</option>
+												<option value="Purple">
+													Purple
+												</option>
+												<option value="Orange">
+													Orange
+												</option>
+												<option value="Aqua">
+													Aqua
+												</option>
+											</select>
+										</div>
+									</div>
+									<div
+										class="row d-flex justify-content-center"
+									>
+										<div class="col-lg-6 pt-5 pb-3">
+											<button type="submit" class="btn1">
+												Create
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- View Product Modal -->
+		<div
+			class="modal fade"
+			id="viewProduct"
+			tabindex="-1"
+			aria-labelledby="viewProduct"
+			aria-hidden="true"
+		>
+			<div class="modal-dialog modal-xl">
+				<div class="modal-content" id="prodetails">
+					<div class="row">
+						<div class="single-pro-image col-lg-6">
+							<img src="#" width="100%" id="MainImg" alt="" />
+							<div class="small-img-group"></div>
+						</div>
+						<div class="single-pro-details col-lg-6">
+							<h6 id="genderType">Men / T-Shirts</h6>
+							<h4 id="view_productName">Men's Fashion T Shirt</h4>
+							<div>
+								<div class="star">
+									<span
+										><strong id="view_star"
+											>4.8</strong
+										></span
+									>
+									<i class="bx bxs-star"></i>
+									<i class="bx bxs-star"></i>
+									<i class="bx bxs-star"></i>
+									<i class="bx bxs-star"></i>
+									<i class="bx bxs-star"></i>
+								</div>
+								<span
+									><strong id="view_sold">507</strong>
+									Sold</span
+								>
+								<span
+									><strong id="view_available">1000</strong>
+									Available</span
+								>
+							</div>
+							<h2 id="view_price">$139.00</h2>
+							<div class="view_select_container">
+								<select id="view_sizes">
+									<option selected>Size</option>
+									<option>XL</option>
+									<option>XXL</option>
+									<option>Small</option>
+									<option>Large</option>
+								</select>
+								<select id="view_colors">
+									<option selected>Size</option>
+									<option>XL</option>
+									<option>XXL</option>
+									<option>Small</option>
+									<option>Large</option>
+								</select>
+							</div>
+							<h4>Product Details</h4>
+							<span id="view_description"
+								>Learn How To Make Full Responsive Ecommerce
+								Website Using HTML CSS & JavaScript. This is a
+								free HTML CSS Course. And in this course we will
+								learn how to build and deploy a full multipage
+								ecommerce website completely from scratch step
+								by step.</span
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Edit Product Modal -->
+		<div
+			class="modal fade"
+			id="editProduct"
+			tabindex="-1"
+			aria-labelledby="editProduct"
+			aria-hidden="true"
+		>
+			<div class="modal-dialog modal-xl">
+				<div class="modal-content">
+					<form
+						th:action="@{/sStore/admin/editProduct}"
+						method="post"
+						enctype="multipart/form-data"
+					>
+						<div class="container m-0 py-3 px-0">
+							<div class="row px-3 py-3">
+								<h3 class="font-weight-bold">Edit Product</h3>
+							</div>
+							<div class="row g-0">
+								<!-- Product Image -->
+								<div class="col-lg-auto ps-3">
+									<div class="card">
+										<div class="top">
+											<p>Drag & drop image uploading</p>
+										</div>
+										<div id="edit_form_image">
+											<span class="edit_inner"
+												>Drag & drop image here or
+												<span class="edit_select"
+													>Browse</span
+												>
+											</span>
+											<input
+												type="file"
+												name="edit_files"
+												class="files"
+												multiple
+												accept="image/*"
+											/>
+										</div>
+										<div class="edit_image_container"></div>
+									</div>
+								</div>
+								<!-- Product information -->
+								<div class="col-lg-7 flex-grow-1 px-5">
+									<div class="row">
+										<input
+											type="text"
+											id="edit_id"
+											name="id"
+											hidden
+										/>
+										<div class="col-lg-4 pb-2">
+											<label
+												for="edit_productName"
+												class="form-label"
+												>Name</label
+											>
+											<input
+												type="text"
+												class="form-control"
+												required
+												name="productName"
+												id="edit_productName"
+											/>
+										</div>
+										<div class="col-lg-4 pb-2">
+											<label
+												for="edit_price"
+												class="form-label"
+												>Price</label
+											>
+											<input
+												type="number"
+												class="form-control"
+												required
+												name="price"
+												id="edit_price"
+												min="0"
+											/>
+										</div>
+										<div class="col-lg-4 pb-2">
+											<label
+												for="edit_branch"
+												class="form-label"
+												>Branch</label
+											>
+											<input
+												type="text"
+												class="form-control"
+												name="branch"
+												id="edit_branch"
+											/>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-12 py-2">
+											<label
+												for="edit_description"
+												class="form-label"
+												>Description</label
+											>
+											<textarea
+												class="form-control"
+												id="edit_description"
+												rows="3"
+												name="description"
+											></textarea>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-4 py-2">
+											<label
+												for="edit_available"
+												class="form-label"
+												>Available</label
+											>
+											<input
+												type="number"
+												class="form-control"
+												required
+												name="available"
+												id="edit_available"
+												min="0"
+											/>
+										</div>
+										<div class="col-lg-4 py-2">
+											<label
+												for="edit_gender"
+												class="form-label"
+												>Product For</label
+											>
+											<select
+												class="form-select"
+												id="edit_gender"
+												name="gender"
+											>
+												<option value="1" selected>
+													Men
+												</option>
+												<option value="0">Women</option>
+											</select>
+										</div>
+										<div class="col-lg-4 py-2">
+											<label
+												for="edit_type"
+												class="form-label"
+												>Type</label
+											>
+											<select
+												class="form-select"
+												name="type"
+												id="edit_type"
+											>
+												<option
+													value="T-Shirt"
+													selected
+												>
+													T-Shirt
+												</option>
+												<option value="Jean">
+													Jean
+												</option>
+											</select>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-6 py-2">
+											<label
+												for="edit_sizes"
+												class="form-label"
+												>Product Sizes</label
+											>
+											<select
+												class="form-select"
+												multiple
+												id="edit_sizes"
+												name="edit_sizes"
+											>
+												<optgroup label="Clothing Size">
+													<option value="XS">
+														XS
+													</option>
+													<option value="S">S</option>
+													<option value="M">M</option>
+													<option value="L">L</option>
+													<option value="XL">
+														XL
+													</option>
+													<option value="XXL">
+														XXL
+													</option>
+													<option value="3X">
+														3X
+													</option>
+													<option value="4X">
+														4X
+													</option>
+												</optgroup>
+												<optgroup label="Shoe Size">
+													<option value="35">
+														35
+													</option>
+													<option value="36">
+														36
+													</option>
+													<option value="37">
+														37
+													</option>
+													<option value="38">
+														38
+													</option>
+													<option value="39">
+														39
+													</option>
+													<option value="40">
+														40
+													</option>
+													<option value="41">
+														41
+													</option>
+													<option value="42">
+														42
+													</option>
+													<option value="43">
+														43
+													</option>
+													<option value="44">
+														44
+													</option>
+													<option value="45">
+														45
+													</option>
+												</optgroup>
+											</select>
+										</div>
+										<div class="col-lg-6 py-2">
+											<label
+												for="edit_colors"
+												class="form-label"
+												>Product Colors</label
+											>
+											<select
+												class="form-select"
+												id="edit_colors"
+												multiple
+												name="edit_colors"
+											>
+												<option value="Blue">
+													Blue
+												</option>
+												<option value="Green">
+													Green
+												</option>
+												<option value="Brown">
+													Brown
+												</option>
+												<option value="Grey">
+													Grey
+												</option>
+												<option value="Red">Red</option>
+												<option value="White">
+													White
+												</option>
+												<option value="Pink">
+													Pink
+												</option>
+												<option value="Yellow">
+													Yellow
+												</option>
+												<option value="Black">
+													Black
+												</option>
+												<option value="Beige">
+													Beige
+												</option>
+												<option value="Navy Blue">
+													Navy Blue
+												</option>
+												<option value="Maroon">
+													Maroon
+												</option>
+												<option value="Purple">
+													Purple
+												</option>
+												<option value="Orange">
+													Orange
+												</option>
+												<option value="Aqua">
+													Aqua
+												</option>
+											</select>
+										</div>
+									</div>
+									<div
+										class="row d-flex justify-content-center"
+									>
+										<div class="col-lg-6 pt-5 pb-3">
+											<button type="submit" class="btn1">
+												Update
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- Delete Product -->
+		<div
+			class="modal fade"
+			id="delProduct"
+			tabindex="-1"
+			aria-labelledby="delProduct"
+			aria-hidden="true"
+		>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<h3>DELETE PRODUCT</h3>
+					<span>Are you sure want to delete this product</span>
+					<a href="#" class="btn btn-danger" id="delBtn">Delete</a>
+				</div>
+			</div>
+		</div>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+		<script th:src="@{/static/js/ajax.js}"></script>
+		<script th:src="@{/static/js/admin.js}"></script>
+		<!-- <script src="../static/js/admin.js"></script> -->
+		<script>
+			// Slide bar
+			const allSideMenu = document.querySelectorAll(
+				"#sidebar .side-menu.top li a"
+			);
+			allSideMenu.forEach((item) => {
+				item.parentElement.classList.remove("active");
+			});
+			allSideMenu[1].parentElement.classList.add("active");
+		</script>
+	</body>
+</html>
