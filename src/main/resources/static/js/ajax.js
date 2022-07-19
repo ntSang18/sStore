@@ -38,7 +38,14 @@ $(document).ready(function () {
 			}
 			$("#view_productName").html(product.productName);
 			$("#view_available").html(product.available);
-			$("#view_price").html(product.price + "&#8363;");
+			if (product.price % 1000 == 0) {
+				$("#view_price").html(
+					product.price / 1000 + "." + "000" + "&#8363;"
+				);
+			} else {
+				$("#view_price").html(product.price / 1000 + "&#8363;");
+			}
+
 			$("#view_sizes")
 				.empty()
 				.append('<option selected="selected" value="">Sizes</option>');

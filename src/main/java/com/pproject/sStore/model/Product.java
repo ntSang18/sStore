@@ -173,7 +173,10 @@ public class Product {
 			image.setProduct(this);
 		}
 	}
-	
+
+	public String getMainImage() {
+		return "/static/uploads/product_images/" + id + "/" + images.get(0).getImageName();
+	}
 
 	public List<ProductSize> getSizes() {
 		return sizes;
@@ -189,7 +192,6 @@ public class Product {
 			size.setProduct(this);
 		}
 	}
-	
 
 	public List<ProductColor> getColors() {
 		return colors;
@@ -205,7 +207,6 @@ public class Product {
 			color.setProduct(this);
 		}
 	}
-	
 
 	public List<ProductReview> getReviews() {
 		return reviews;

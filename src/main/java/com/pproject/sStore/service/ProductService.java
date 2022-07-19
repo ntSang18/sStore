@@ -91,6 +91,22 @@ public class ProductService {
 		return products;
 	}
 
+	public List<Product> getFeaturedProducts() {
+		List<Product> featuredProducts = getAllProduct();
+		featuredProducts.sort((Product p1, Product p2) -> {
+			return p1.getSold().compareTo(p2.getSold());
+		});
+		return featuredProducts.subList(0, 8);
+	}
+
+	public List<Product> getNewProducts() {
+		List<Product> featuredProducts = getAllProduct();
+		featuredProducts.sort((Product p1, Product p2) -> {
+			return p1.getCreateAt().compareTo(p2.getCreateAt());
+		});
+		return featuredProducts.subList(0, 8);
+	}
+
 	public Product getProductById(Long id) {
 		return productRepository.findById(id)
 				.orElseThrow(() -> new IllegalStateException("Product by id " + id + "does not exists"));
@@ -99,6 +115,7 @@ public class ProductService {
 	public Product addProduct(Product product, MultipartFile[] files, List<String> sizes, List<String> colors)
 			throws IOException {
 		product.setCreateAt(LocalDate.now());
+		product.setSold(0L);
 		Product saveProduct = productRepository.save(product);
 		for (MultipartFile file : files) {
 			String fileName = file.getOriginalFilename();

@@ -37,13 +37,24 @@ public class Controler {
 	}
 
 	@GetMapping
-	public String index() {
+	public String index(Model model) {
+		List<Product> featuredProducts = productService.getFeaturedProducts();
+		List<Product> newProducts = productService.getNewProducts();
+		model.addAttribute("featuredProducts", featuredProducts);
+		model.addAttribute("newProducts", newProducts);
 		return "index";
 	}
 
 	@GetMapping(value = "/shop")
 	public String shop(Model model) {
 		return "shop";
+	}
+
+	@GetMapping(value = "/sproduct")
+	public String sproduct(Model model, Long id) {
+		Product product = productService.getProductById(id);
+		model.addAttribute("product", product);
+		return "sproduct";
 	}
 
 	@GetMapping(value = "/about")

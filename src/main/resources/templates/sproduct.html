@@ -17,42 +17,18 @@
 			href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
 			rel="stylesheet"
 		/>
+		<!-- Autonumeric -->
+		<script src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"></script>
 		<!-- style -->
 		<link rel="stylesheet" href="../static/css/style.css" />
 	</head>
 	<body>
-		<!-- <section id="header">
-			<a href="#"
-				><img src="../static/image/logo.png" class="logo" alt=""
-			/></a>
-			<div>
-				<ul id="navbar">
-					<li><a href="#">Home</a></li>
-					<li>
-						<a class="active" href="../templates/shop.html">Shop</a>
-					</li>
-					<li><a href="#">About</a></li>
-					<li><a href="#">Blog</a></li>
-					<li><a href="#">Contact</a></li>
-					<li id="lg-bag">
-						<a href="#"><i class="bx bx-shopping-bag"></i></a>
-					</li>
-					<a href="#" id="close"
-						><i class="bx bxs-chevron-right-square"></i
-					></a>
-				</ul>
-			</div>
-			<div id="mobile">
-				<a href="#"><i class="bx bx-shopping-bag"></i></a>
-				<i id="bar" class="bx bxs-chevron-left-square"></i>
-			</div>
-		</section> -->
 		<section th:replace="index :: navbar"></section>
 
 		<section id="prodetails" class="section-p1">
 			<div class="single-pro-image">
 				<img
-					src="../static/image/products/f1.jpg"
+					th:src="@{${product.getMainImage}}"
 					width="100%"
 					id="MainImg"
 					alt=""
@@ -60,33 +36,12 @@
 
 				<div class="small-img-group">
 					<!-- for each -->
-					<div class="small-img-col">
+					<div
+						class="small-img-col"
+						th:each="productImage : ${product.images}"
+					>
 						<img
-							src="../static/image/products/f1.jpg"
-							width="100%"
-							class="small-img"
-							alt=""
-						/>
-					</div>
-					<div class="small-img-col">
-						<img
-							src="../static/image/products/f2.jpg"
-							width="100%"
-							class="small-img"
-							alt=""
-						/>
-					</div>
-					<div class="small-img-col">
-						<img
-							src="../static/image/products/f3.jpg"
-							width="100%"
-							class="small-img"
-							alt=""
-						/>
-					</div>
-					<div class="small-img-col">
-						<img
-							src="../static/image/products/f4.jpg"
+							th:src="@{${productImage.getImage}}"
 							width="100%"
 							class="small-img"
 							alt=""
@@ -96,20 +51,108 @@
 			</div>
 
 			<div class="single-pro-details">
-				<h6>Home / T-Shirts</h6>
-				<h4>Men's Fashion T Shirt</h4>
-				<h2>$139.00</h2>
-				<select>
-					<option>Select Size</option>
-					<option>XL</option>
-					<option>XXL</option>
-					<option>Small</option>
-					<option>Large</option>
-				</select>
-				<input type="number" value="1" min="1" />
+				<h6 th:if="${product.gender}" th:text="|Men / ${product.type}|">
+					Home / T-Shirts
+				</h6>
+				<h6
+					th:unless="${product.gender}"
+					th:text="|Women / ${product.type}|"
+				>
+					Home / T-Shirts
+				</h6>
+				<h4 th:text="${product.productName}">Men's Fashion T Shirt</h4>
+				<div>
+					<div class="star">
+						<span><strong>4.8</strong></span>
+						<i class="bx bxs-star"></i>
+						<i class="bx bxs-star"></i>
+						<i class="bx bxs-star"></i>
+						<i class="bx bxs-star"></i>
+						<i class="bx bxs-star"></i>
+					</div>
+					<span
+						><strong th:text="${product.sold}">507</strong>
+						Sold</span
+					>
+					<span
+						><strong th:text="${product.available}">1000</strong>
+						Available</span
+					>
+				</div>
+				<h2 class="price" th:text="${product.price}">$139.00</h2>
+
+				<div class="select-container color">
+					<div class="select-header"><span>Select Color</span></div>
+					<div class="select-swap">
+						<div
+							class="swatch-element color"
+							th:each="productColor : ${product.colors}"
+						>
+							<input
+								th:id="${productColor.color}"
+								type="radio"
+								th:value="${productColor.color}"
+								name="color"
+							/>
+							<label
+								th:id="${productColor.color}"
+								class="color"
+								th:for="${productColor.color}"
+							>
+								<span th:id="${productColor.color}">Green</span>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="select-container size">
+					<div class="select-header"><span>Select Size</span></div>
+					<div class="select-swap">
+						<div
+							class="swatch-element"
+							th:each="productSize : ${product.sizes}"
+						>
+							<input
+								th:id="${productSize.size}"
+								type="radio"
+								name="size"
+								th:value="${productSize.size}"
+							/>
+							<label
+								th:id="${productSize.size}"
+								class="size"
+								th:for="${productSize.size}"
+							>
+								<span th:text="${productSize.size}">S</span>
+							</label>
+						</div>
+					</div>
+					<!-- <select>
+						<option value="" selected>Select Size</option>
+						<option
+							th:each="productSize : ${product.sizes}"
+							th:text="${productSize.size}"
+							th:value="${productSize.size}"
+						>
+							XL
+						</option>
+					</select>
+					<select>
+						<option selected>Select Color</option>
+						<option
+							th:each="productColor : ${product.colors}"
+							th:text="${productColor.color}"
+							th:value="${productColor.color}"
+						>
+							Navy Blue
+						</option>
+					</select> -->
+				</div>
+
+				<input type="number" value="1" min="1" name="quantity" />
 				<button class="normal">Add To Cart</button>
 				<h4>Product Details</h4>
-				<span
+				<span th:text="${product.description}"
 					>Learn How To Make Full Responsive Ecommerce Website Using
 					HTML CSS & JavaScript. This is a free HTML CSS Course. And
 					in this course we will learn how to build and deploy a full
@@ -190,76 +233,8 @@
 			</div>
 		</section>
 
-		<!-- <section id="newsletter" class="section-p1 section-m1">
-			<div class="newstext">
-				<h4>Sign Up For Newsletters</h4>
-				<p>
-					Get E-mail updates about out latest shop and
-					<span>special offers.</span>
-				</p>
-			</div>
-			<div class="form">
-				<input type="text" placeholder="Your email address" />
-				<button class="normal">Sign up</button>
-			</div>
-		</section> -->
 		<section th:replace="index :: newsletter"></section>
 
-		<!-- <footer class="section-p1">
-			<div class="f-col">
-				<img class="logo" src="../static/image/logo.png" alt="" />
-				<h4>Contact</h4>
-				<p>
-					<strong>Address: </strong> Phong Nhị, Điện An, Điện Bàn,
-					Quảng Nam
-				</p>
-				<p><strong>Phone: </strong> 0777908037</p>
-				<p><strong>Hours: </strong> 8:00 - 18:00, Mon - Sat</p>
-				<div class="follow">
-					<h4>Follow us</h4>
-					<div class="icon">
-						<i class="bx bxl-facebook"></i>
-						<i class="bx bxl-twitter"></i>
-						<i class="bx bxl-instagram"></i>
-						<i class="bx bxl-pinterest-alt"></i>
-						<i class="bx bxl-youtube"></i>
-					</div>
-				</div>
-			</div>
-
-			<div class="f-col">
-				<h4>About</h4>
-				<a href="#">About Us</a>
-				<a href="#">Delivery Information</a>
-				<a href="#">Privacy Policy</a>
-				<a href="#">Term & Conditions</a>
-				<a href="#">Contact Us</a>
-			</div>
-
-			<div class="f-col">
-				<h4>My Account</h4>
-				<a href="#">Sign In</a>
-				<a href="#">View Cart</a>
-				<a href="#">My Wishlist</a>
-				<a href="#">Track My Order</a>
-				<a href="#">Help</a>
-			</div>
-
-			<div class="f-col install">
-				<h4>Install App</h4>
-				<p>From App Store or Google Play</p>
-				<div class="f-row">
-					<img src="../static/image/pay/app.jpg" alt="" />
-					<img src="../static/image/pay/play.jpg" alt="" />
-				</div>
-				<p>Secured Payment Gateways</p>
-				<img src="../static/image/pay/pay.png" alt="" />
-			</div>
-
-			<div class="copyright">
-				<p>&copy; 2021, Tech2 etc - HTML CSS Ecommerce Template</p>
-			</div>
-		</footer> -->
 		<footer th:replace="index :: footer"></footer>
 
 		<div th:replace="index :: loginModal"></div>
@@ -277,4 +252,11 @@
 		}
 	</script>
 	<script src="../static/js/script.js"></script>
+	<script>
+		const links = document.querySelectorAll("#navbar li a");
+		links.forEach((item) => {
+			item.classList.remove("active");
+		});
+		links[1].classList.add("active");
+	</script>
 </html>

@@ -47,6 +47,10 @@ public class ProductImage {
         return imageName;
     }
 
+    public String getImage() {
+        return "/static/uploads/product_images/" + product.getId() + "/" + imageName;
+    }
+
     public void setImageName(String imageName) {
         this.imageName = imageName;
     }

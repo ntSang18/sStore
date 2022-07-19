@@ -78,4 +78,38 @@ $(document).ready(function () {
 			});
 		});
 	});
+
+	$(".swatch-element.color label span").each(function () {
+		$(this).css(
+			"background-image",
+			"url(../static/color/" + this.id + ".png)"
+		);
+	});
+
+	$(".swatch-element .color").click(function () {
+		$(".swatch-element .color").each(function () {
+			$(this).removeClass("sd");
+		});
+		$(".select-container.color .select-header span").html(this.id);
+		$(this).addClass("sd");
+	});
+
+	$(".swatch-element .size").click(function () {
+		$(".swatch-element .size").each(function () {
+			$(this).removeClass("sd");
+		});
+		$(".select-container.size .select-header span").html(this.id);
+		$(this).addClass("sd");
+	});
 });
+new AutoNumeric.multiple(".price", {
+	decimalPlaces: "0",
+	decimalCharacter: ",",
+	digitGroupSeparator: ".",
+	currencySymbol: "₫",
+	currencySymbolPlacement: "s",
+});
+
+const sproduct = (element) => {
+	window.location.href = "/sStore/sproduct?id=" + element.id;
+};

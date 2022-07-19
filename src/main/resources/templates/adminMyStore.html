@@ -15,6 +15,7 @@
 			href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css"
 			rel="stylesheet"
 		/>
+		<script src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"></script>
 		<link rel="stylesheet" th:href="@{/static/css/admin.css}" />
 		<!-- <link rel="stylesheet" href="../static/css/admin.css" /> -->
 		<title>sStore | Admin</title>
@@ -72,25 +73,25 @@
 										></i>
 										<div class="menu">
 											<a
-												th:href="@{/sStore/admin/store/(filterMode=1)}"
+												th:href="@{/sStore/admin/store(filterMode=1)}"
 												><i class="bx bx-up-arrow-alt"
 													>Price
 												</i></a
 											>
 											<a
-												th:href="@{/sStore/admin/store/(filterMode=2)}"
+												th:href="@{/sStore/admin/store(filterMode=2)}"
 												><i class="bx bx-down-arrow-alt"
 													>Price
 												</i></a
 											>
 											<a
-												th:href="@{/sStore/admin/store/(filterMode=3)}"
+												th:href="@{/sStore/admin/store(filterMode=3)}"
 												><i class="bx bx-up-arrow-alt"
 													>Date Create
 												</i></a
 											>
 											<a
-												th:href="@{/sStore/admin/store/(filterMode=4)}"
+												th:href="@{/sStore/admin/store(filterMode=4)}"
 												><i class="bx bx-down-arrow-alt"
 													>Date Create
 												</i></a
@@ -119,7 +120,8 @@
 									</td>
 									<td>
 										<span
-											th:text="|${product.price}&#8363;|"
+											class="price"
+											th:text="${product.price}"
 											>Price of product</span
 										>
 									</td>
@@ -314,15 +316,70 @@
 												name="type"
 												id="type"
 											>
-												<option
-													value="T-Shirt"
-													selected
-												>
-													T-Shirt
-												</option>
-												<option value="Jean">
-													Jean
-												</option>
+												<optgroup label="Men">
+													<option
+														value="T-Shirt"
+														selected
+													>
+														T-Shirt
+													</option>
+													<option value="Shirt">
+														Shirt
+													</option>
+													<option value="Polo Shirt">
+														Polo Shirt
+													</option>
+													<option value="Suit">
+														Suit
+													</option>
+													<option value="Hoodie">
+														Hoodie
+													</option>
+													<option value="Jacket">
+														Jacket
+													</option>
+													<option value="Jeans">
+														Jeans
+													</option>
+													<option value="Short">
+														Short
+													</option>
+												</optgroup>
+												<optgroup label="Women">
+													<option
+														value="T-Shirt"
+														selected
+													>
+														T-Shirt
+													</option>
+													<option value="Shirt">
+														Shirt
+													</option>
+													<option value="Sweater">
+														Sweater
+													</option>
+													<option value="Croptop">
+														Croptop
+													</option>
+													<option value="Hoodie">
+														Hoodie
+													</option>
+													<option value="Jacket">
+														Jacket
+													</option>
+													<option value="Jeans">
+														Jeans
+													</option>
+													<option value="Short">
+														Short
+													</option>
+													<option value="Dress">
+														Dress
+													</option>
+													<option value="Skirt">
+														Skirt
+													</option>
+												</optgroup>
 											</select>
 										</div>
 									</div>
@@ -695,15 +752,70 @@
 												name="type"
 												id="edit_type"
 											>
-												<option
-													value="T-Shirt"
-													selected
-												>
-													T-Shirt
-												</option>
-												<option value="Jean">
-													Jean
-												</option>
+												<optgroup label="Men">
+													<option
+														value="T-Shirt"
+														selected
+													>
+														T-Shirt
+													</option>
+													<option value="Shirt">
+														Shirt
+													</option>
+													<option value="Polo Shirt">
+														Polo Shirt
+													</option>
+													<option value="Suit">
+														Suit
+													</option>
+													<option value="Hoodie">
+														Hoodie
+													</option>
+													<option value="Jacket">
+														Jacket
+													</option>
+													<option value="Jeans">
+														Jeans
+													</option>
+													<option value="Short">
+														Short
+													</option>
+												</optgroup>
+												<optgroup label="Women">
+													<option
+														value="T-Shirt"
+														selected
+													>
+														T-Shirt
+													</option>
+													<option value="Shirt">
+														Shirt
+													</option>
+													<option value="Sweater">
+														Sweater
+													</option>
+													<option value="Croptop">
+														Croptop
+													</option>
+													<option value="Hoodie">
+														Hoodie
+													</option>
+													<option value="Jacket">
+														Jacket
+													</option>
+													<option value="Jeans">
+														Jeans
+													</option>
+													<option value="Short">
+														Short
+													</option>
+													<option value="Dress">
+														Dress
+													</option>
+													<option value="Skirt">
+														Skirt
+													</option>
+												</optgroup>
 											</select>
 										</div>
 									</div>
@@ -872,6 +984,13 @@
 		<script th:src="@{/static/js/admin.js}"></script>
 		<!-- <script src="../static/js/admin.js"></script> -->
 		<script>
+			new AutoNumeric.multiple(".price", {
+				decimalPlaces: "0",
+				decimalCharacter: ",",
+				digitGroupSeparator: ".",
+				currencySymbol: "₫",
+				currencySymbolPlacement: "s",
+			});
 			// Slide bar
 			const allSideMenu = document.querySelectorAll(
 				"#sidebar .side-menu.top li a"
