@@ -39,6 +39,12 @@
 					<li><a th:href="@{/sStore/contact}">Contact</a></li>
 					<li th:if="${session.USER}">
 						<a href="">Account</a>
+						<input
+							type="text"
+							th:value="${session.USER.id}"
+							hidden
+							id="user-id"
+						/>
 					</li>
 					<li th:unless="${session.USER}">
 						<a

@@ -884,7 +884,8 @@ footer .copyright {
 }
 
 #prodetails .single-pro-details span {
-    line-height: 25px;
+    /* line-height: 25px; */
+    white-space: pre-line;
 }
 
 

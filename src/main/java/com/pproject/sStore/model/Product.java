@@ -48,17 +48,20 @@ public class Product {
 	@Column(columnDefinition = "TEXT")
 	private String type;
 
-	@OneToMany(mappedBy = "product", orphanRemoval = true, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+	@OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<ProductImage> images = new ArrayList<ProductImage>();
 
-	@OneToMany(mappedBy = "product", orphanRemoval = true, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+	@OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<ProductSize> sizes = new ArrayList<ProductSize>();
 
-	@OneToMany(mappedBy = "product", orphanRemoval = true, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+	@OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<ProductColor> colors = new ArrayList<ProductColor>();
 
-	@OneToMany(mappedBy = "product", orphanRemoval = true, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+	@OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<ProductReview> reviews = new ArrayList<ProductReview>();
+	
+	@OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
+	private List<ProductItem> productItems = new ArrayList<ProductItem>();
 
 	public Product() {
 		super();
@@ -81,10 +84,6 @@ public class Product {
 
 	public Long getId() {
 		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getProductName() {
@@ -221,6 +220,14 @@ public class Product {
 			this.reviews.add(review);
 			review.setProduct(this);
 		}
+	}
+
+	public List<ProductItem> getProductItems() {
+		return productItems;
+	}
+
+	public void setProductItems(List<ProductItem> productItems) {
+		this.productItems = productItems;
 	}
 
 	@Override

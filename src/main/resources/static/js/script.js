@@ -101,7 +101,28 @@ $(document).ready(function () {
 		$(".select-container.size .select-header span").html(this.id);
 		$(this).addClass("sd");
 	});
+
+	$("#add-to-cart").click(function (event) {
+		event.preventDefault();
+		var color = $("input[name='color']:checked").val();
+		var size = $("input[name='size']:checked").val();
+		var quantity = $("input[name='quantity']").val();
+		var userId = $("#user-id").val();
+		var productId = $("input[name='product-id']").val();
+		var url = "/sStore/add-to-cart";
+		data = {
+			color: color,
+			size: size,
+			quantity: quantity,
+			userId: userId,
+			productId: productId,
+		};
+		$.post(url, data, function (message, status) {
+			alert(message);
+		});
+	});
 });
+
 new AutoNumeric.multiple(".price", {
 	decimalPlaces: "0",
 	decimalCharacter: ",",

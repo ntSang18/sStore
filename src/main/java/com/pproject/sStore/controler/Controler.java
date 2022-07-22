@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.core.sym.Name;
 import com.pproject.sStore.model.Address;
 import com.pproject.sStore.model.Product;
+import com.pproject.sStore.model.ProductItem;
 import com.pproject.sStore.model.User;
+import com.pproject.sStore.repository.CartRepository;
+import com.pproject.sStore.service.CartService;
 import com.pproject.sStore.service.ProductService;
 import com.pproject.sStore.service.UserService;
 
@@ -29,11 +31,13 @@ public class Controler {
 
 	private final UserService userService;
 	private final ProductService productService;
+	private final CartService cartService;
 
 	@Autowired
-	public Controler(UserService userService, ProductService productService) {
+	public Controler(UserService userService, ProductService productService, CartService cartService) {
 		this.userService = userService;
 		this.productService = productService;
+		this.cartService = cartService;
 	}
 
 	@GetMapping
@@ -82,7 +86,7 @@ public class Controler {
 		try {
 			User u = userService.register(user, address);
 			session.setAttribute("USER", u);
-			return "redirect:/";
+			return "redirect:/sStore/";
 		} catch (Exception e) {
 			model.addAttribute("registerMessage", "Email or phone number taken");
 			return "404";
@@ -95,7 +99,7 @@ public class Controler {
 		try {
 			User u = userService.login(email, password);
 			session.setAttribute("USER", u);
-			return "redirect:/";
+			return "redirect:/sStore/";
 		} catch (Exception e) {
 			model.addAttribute("loginMessage", "Email or password incorrect");
 			return "404";
@@ -105,7 +109,16 @@ public class Controler {
 	@GetMapping(value = "/logout")
 	public String logout(HttpSession session) {
 		session.removeAttribute("USER");
-		return "redirect:/";
+		return "redirect:/sStore/";
+	}
+
+	@PostMapping(value = "/add-to-cart")
+	@ResponseBody
+	public String addToCart(
+			ProductItem productItem,
+			@RequestParam(name = "userId") Long userId,
+			@RequestParam(name = "productId") Long productId) {
+		return cartService.addToCart(productItem, userId, productId);
 	}
 
 	/* ADMIN */
