@@ -59,7 +59,7 @@ public class Product {
 
 	@OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<ProductReview> reviews = new ArrayList<ProductReview>();
-	
+
 	@OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<ProductItem> productItems = new ArrayList<ProductItem>();
 
@@ -140,6 +140,16 @@ public class Product {
 
 	public void setSold(Long sold) {
 		this.sold = sold;
+	}
+
+	public void inSold(Long sold) {
+		this.sold += sold;
+		this.available -= sold;
+	}
+
+	public void deSold(Long sold) {
+		this.sold -= sold;
+		this.available += sold;
 	}
 
 	public boolean isGender() {

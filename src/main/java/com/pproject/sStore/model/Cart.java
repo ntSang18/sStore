@@ -59,10 +59,19 @@ public class Cart {
 						&& items.get(i).getColor().equals(item.getColor())
 						&& items.get(i).getSize().equals(item.getSize())) {
 					items.get(i).inQuantity(item.getQuantity());
-				} else {
-					this.items.add(item);
-					item.setCart(this);
+					return;
 				}
+			}
+			this.items.add(item);
+			item.setCart(this);
+		}
+	}
+
+	public void delItems(Long itemId) {
+		for (int i = 0; i < this.items.size(); i++) {
+			if (this.items.get(i).getId() == itemId) {
+				this.items.get(i).setCart(null);
+				break;
 			}
 		}
 	}
@@ -73,6 +82,14 @@ public class Cart {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public Long getSubTotal() {
+		Long SubTotal = 0L;
+		for (ProductItem item : items) {
+			SubTotal += (item.getQuantity() * item.getProduct().getPrice());
+		}
+		return SubTotal;
 	}
 
 	@Override

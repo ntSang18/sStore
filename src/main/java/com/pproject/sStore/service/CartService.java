@@ -1,5 +1,7 @@
 package com.pproject.sStore.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,18 @@ public class CartService {
         this.productItemRepository = productItemRepository;
     }
 
+    public List<ProductItem> getCartItems(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("User by id " + userId + " does not exits"));
+        return user.getCart().getItems();
+    }
+
+    public Long getSubTotal(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("User by id " + userId + " does not exits"));
+        return user.getCart().getSubTotal();
+    }
+
     public String addToCart(ProductItem productItem, Long userId, Long productId) {
         try {
             Product product = productRepository.findById(productId)
@@ -43,6 +57,14 @@ public class CartService {
         } catch (Exception e) {
             e.printStackTrace();
             return e.getMessage();
+        }
+    }
+
+    public void delCartItem(Long itemId) {
+        try {
+            productItemRepository.deleteById(itemId);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -76,15 +76,6 @@ public class Order {
 		this.items = items;
 	}
 
-	public void addItems(ProductItem item) {
-		if (!this.items.contains(item)) {
-			this.addItems(item);
-			item.setOrder(this);
-		} else {
-			this.items.get(this.items.indexOf(item)).inQuantity(item.getQuantity());
-		}
-	}
-
 	public User getUser() {
 		return user;
 	}

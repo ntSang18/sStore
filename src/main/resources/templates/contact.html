@@ -1,67 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<meta charset="utf-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<div th:replace="index :: header"></div>
 		<title>sStore | Contact</title>
-		<!-- jQuery -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-		<!-- BootStrap CSS-->
-		<link
-			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
-			rel="stylesheet"
-		/>
-		<!-- BoxIcons -->
-		<link
-			href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
-			rel="stylesheet"
-		/>
-		<!-- style -->
-		<link rel="stylesheet" href="../static/css/style.css" />
 	</head>
 	<body>
-		<!-- <section id="header">
-			<a href="#"
-				><img src="../static/image/logo.png" class="logo" alt="" />
-				sStore</a
-			>
-			<div>
-				<ul id="navbar">
-					<li>
-						<a href="../templates/index.html">Home</a>
-					</li>
-					<li><a href="../templates/shop.html">Shop</a></li>
-					<li><a href="../templates/about.html">About</a></li>
-					<li><a href="../templates/blog.html">Blog</a></li>
-					<li>
-						<a class="active" href="../templates/contact.html"
-							>Contact</a
-						>
-					</li>
-					<li>
-						<a
-							href="#"
-							data-bs-toggle="modal"
-							data-bs-target="#loginModal"
-							>Login</a
-						>
-					</li>
-					<li id="lg-bag">
-						<a href="../templates/cart.html"
-							><i class="bx bx-shopping-bag"></i
-						></a>
-					</li>
-					<a href="#" id="close"
-						><i class="bx bxs-chevron-right-square"></i
-					></a>
-				</ul>
-			</div>
-			<div id="mobile">
-				<a href="#"><i class="bx bx-shopping-bag"></i></a>
-				<i id="bar" class="bx bxs-chevron-left-square"></i>
-			</div>
-		</section> -->
 		<section th:replace="index :: navbar"></section>
 
 		<section id="page-header" class="about-header">
@@ -153,76 +96,8 @@
 			</div>
 		</section>
 
-		<!-- <section id="newsletter" class="section-p1 section-m1">
-			<div class="newstext">
-				<h4>Sign Up For Newsletters</h4>
-				<p>
-					Get E-mail updates about out latest shop and
-					<span>special offers.</span>
-				</p>
-			</div>
-			<div class="form">
-				<input type="text" placeholder="Your email address" />
-				<button class="normal">Sign up</button>
-			</div>
-		</section> -->
 		<section th:replace="index :: newsletter"></section>
 
-		<!-- <footer class="section-p1">
-			<div class="f-col">
-				<img class="logo" src="../static/image/logo.png" alt="" />
-				<h4>Contact</h4>
-				<p>
-					<strong>Address: </strong> Phong Nhị, Điện An, Điện Bàn,
-					Quảng Nam
-				</p>
-				<p><strong>Phone: </strong> 0777908037</p>
-				<p><strong>Hours: </strong> 8:00 - 18:00, Mon - Sat</p>
-				<div class="follow">
-					<h4>Follow us</h4>
-					<div class="icon">
-						<i class="bx bxl-facebook"></i>
-						<i class="bx bxl-twitter"></i>
-						<i class="bx bxl-instagram"></i>
-						<i class="bx bxl-pinterest-alt"></i>
-						<i class="bx bxl-youtube"></i>
-					</div>
-				</div>
-			</div>
-
-			<div class="f-col">
-				<h4>About</h4>
-				<a href="#">About Us</a>
-				<a href="#">Delivery Information</a>
-				<a href="#">Privacy Policy</a>
-				<a href="#">Term & Conditions</a>
-				<a href="#">Contact Us</a>
-			</div>
-
-			<div class="f-col">
-				<h4>My Account</h4>
-				<a href="#">Sign In</a>
-				<a href="#">View Cart</a>
-				<a href="#">My Wishlist</a>
-				<a href="#">Track My Order</a>
-				<a href="#">Help</a>
-			</div>
-
-			<div class="f-col install">
-				<h4>Install App</h4>
-				<p>From App Store or Google Play</p>
-				<div class="f-row">
-					<img src="../static/image/pay/app.jpg" alt="" />
-					<img src="../static/image/pay/play.jpg" alt="" />
-				</div>
-				<p>Secured Payment Gateways</p>
-				<img src="../static/image/pay/pay.png" alt="" />
-			</div>
-
-			<div class="copyright">
-				<p>&copy; 2021, Tech2 etc - HTML CSS Ecommerce Template</p>
-			</div>
-		</footer> -->
 		<footer th:replace="index :: footer"></footer>
 
 		<div th:replace="index :: loginModal"></div>

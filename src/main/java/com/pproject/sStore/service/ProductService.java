@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +30,8 @@ import com.pproject.sStore.repository.ProductSizeRepository;
 public class ProductService {
 
 	private static final String LOCATION = "src/main/resources/static/uploads/product_images/";
+	private static final Integer PAGE_SIZE = 16;
+
 	private final ProductRepository productRepository;
 	private final ProductImageRepository productImageRepository;
 	private final ProductSizeRepository productSizeRepository;
@@ -47,6 +51,22 @@ public class ProductService {
 
 	public List<Product> getAllProduct() {
 		return productRepository.findAll();
+	}
+
+	public Page<Product> getPageProduct(int pageNum, String search, Integer gender, String type) {
+		if (gender != -1 && type.isEmpty()) {
+			return productRepository.filterByGender(
+					parseGender(gender),
+					search,
+					PageRequest.of(pageNum - 1, PAGE_SIZE));
+		} else if (gender != -1 && !type.isEmpty()) {
+			return productRepository.filterByType(
+					parseGender(gender),
+					type,
+					search,
+					PageRequest.of(pageNum - 1, PAGE_SIZE));
+		}
+		return productRepository.search(search, PageRequest.of(pageNum - 1, PAGE_SIZE));
 	}
 
 	public List<Product> getListProduct(String search, Long filterMode) {
@@ -208,4 +228,10 @@ public class ProductService {
 		return false;
 	}
 
+	private boolean parseGender(Integer gender) {
+		if (gender == 0)
+			return false;
+		else
+			return true;
+	}
 }

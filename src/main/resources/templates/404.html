@@ -59,9 +59,8 @@
 		<div class="container">
 			<h2>Oops! Page not found.</h2>
 			<h1>404</h1>
-			<p th:if="${loginMessage}" th:text="${loginMessage}"></p>
-			<p th:if="${registerMessage}" th:text="${registerMessage}"></p>
-			<a th:href="@{/sStore/}">Go back home</a>
+			<p th:if="${message}" th:text="${message}"></p>
+			<a th:href="@{/sStore}">Go back home</a>
 		</div>
 	</body>
 </html>

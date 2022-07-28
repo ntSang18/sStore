@@ -286,6 +286,9 @@ body{
 #product1 .pro .des h5 {
     padding-top: 7px;
     color: #1a1a1a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     font-size: 14px;
 }
 
@@ -313,6 +316,12 @@ body{
     position: absolute;
     bottom: 20px;
     right: 10px;
+    transition: 0.3s;
+}
+
+#product1 .pro .cart:hover {
+    background-color: #088178;
+    color: #e8f6ea;
 }
 
 #banner {
@@ -580,7 +589,7 @@ footer .copyright {
     color: #fff;
 }
 
-#select .menu {
+/* #select .menu {
     position: relative;
 }
 
@@ -592,7 +601,7 @@ footer .copyright {
     left: 0;
     width: 100%;
     transform: translateY(-3em);
-    z-index: -1;
+    z-index: 1;
     transition: all 0.3s ease 0s, visibility 0s linear 0.3s, z-index 0s linear 0.01s;
 }
 
@@ -601,9 +610,8 @@ footer .copyright {
 #select .menu:hover .ani-menu{
     visibility: visible;
     opacity: 1;
-    z-index: 1;
     transform: translateY(0);
-    transition-delay: 0s, 0s, 0.3s;
+    transition: 0.3s;
 }
 
 #select a {
@@ -657,19 +665,36 @@ footer .copyright {
 
 #select .menu .ani-menu {
     background: #088178;
-}
+} */
 
 #pagination {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #pagination a {
     text-decoration: none;
     background-color: #088178;
-    padding: 15px 20px;
+    padding: 10px 16px;
     border-radius: 4px;
     color: #fff;
     font-weight: 600;
+    transition: 0.3s;
+    margin: 0 3px 0 3px;
+}
+
+#pagination a:hover {
+    background-color: #055c56; 
+}
+
+#pagination a.active {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #088178;
+}
+#pagination a.hide {
+    display: none;
 }
 
 #pagination a i{
@@ -873,8 +898,7 @@ footer .copyright {
     margin-right: 10px;
 }
 
-#prodetails .single-pro-details input:focus,
-#prodetails .single-pro-details select:focus {
+#prodetails .single-pro-details input:focus {
     outline: none;
 }
 

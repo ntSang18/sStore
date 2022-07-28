@@ -1,4 +1,12 @@
 $(document).ready(function () {
+	// SweetAlert2
+	const Toast = Swal.mixin({
+		toast: true,
+		position: "top-end",
+		showConfirmButton: false,
+		timer: 3000,
+		timerProgressBar: true,
+	});
 	// ------------------------------Navbar------------------------------//
 	if ($("#bar")) {
 		$("#bar").click(function () {
@@ -11,7 +19,7 @@ $(document).ready(function () {
 			$("#navbar").removeClass("active");
 		});
 	}
-	//-------------------------------Login/Register-------------------------//
+	//---------------------------Login/Register--------------------------//
 	var provinceCode = "";
 	var districtCode = "";
 
@@ -78,7 +86,26 @@ $(document).ready(function () {
 			});
 		});
 	});
-
+	// ------------------------------Shop------------------------------- //
+	$("#form-filter input[name='search']").keypress(function (event) {
+		if (event.which === 13) {
+			var pageNum = $("#form-filter input[name='pageNum']").val();
+			var gender = $("#form-filter input[name='gender']").val();
+			var type = $("#form-filter input[name='type']").val();
+			var search = $(this).val();
+			var href =
+				"/sStore/shop?pageNum=" +
+				pageNum +
+				"&gender=" +
+				gender +
+				"&type=" +
+				type +
+				"&search=" +
+				search;
+			window.location.href = href;
+		}
+	});
+	// -------------------------Single Product---------------------------//
 	$(".swatch-element.color label span").each(function () {
 		$(this).css(
 			"background-image",
@@ -107,18 +134,73 @@ $(document).ready(function () {
 		var color = $("input[name='color']:checked").val();
 		var size = $("input[name='size']:checked").val();
 		var quantity = $("input[name='quantity']").val();
-		var userId = $("#user-id").val();
 		var productId = $("input[name='product-id']").val();
 		var url = "/sStore/add-to-cart";
-		data = {
-			color: color,
-			size: size,
-			quantity: quantity,
-			userId: userId,
-			productId: productId,
-		};
-		$.post(url, data, function (message, status) {
-			alert(message);
+		if (!color || !size) {
+			Toast.fire({
+				icon: "warning",
+				title: "Size or color are empty",
+			});
+		} else {
+			data = {
+				color: color,
+				size: size,
+				quantity: quantity,
+				productId: productId,
+			};
+			$.post(url, data, function (message, status) {
+				if (status == "success") {
+					Toast.fire({
+						icon: "success",
+						title: "Add to cart successfully!",
+					});
+				} else {
+					Toast.fire({
+						icon: "error",
+						title: "Add to cart failed!",
+					});
+				}
+			});
+		}
+	});
+
+	// ------------------------------Cart---------------------------------//
+	$(".del-cart-item").click(function (event) {
+		event.preventDefault();
+		var href = $(this).attr("href");
+		Swal.fire({
+			title: "Are you sure?",
+			text: "You won't be able to revert this!",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Yes, delete it!",
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$.get(href, function (status) {
+					location.reload();
+				});
+			}
+		});
+	});
+
+	$("#checkout").click(function (event) {
+		event.preventDefault();
+		var url = "/sStore/newOrder";
+		$.get(url, function (status) {
+			location.reload();
+			if (status == "success") {
+				Toast.fire({
+					icon: "success",
+					title: "Order is in process!",
+				});
+			} else {
+				Toast.fire({
+					icon: "error",
+					title: "Error processing order!",
+				});
+			}
 		});
 	});
 });

@@ -2,10 +2,12 @@ package com.pproject.sStore.controler;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +22,8 @@ import com.pproject.sStore.model.Address;
 import com.pproject.sStore.model.Product;
 import com.pproject.sStore.model.ProductItem;
 import com.pproject.sStore.model.User;
-import com.pproject.sStore.repository.CartRepository;
 import com.pproject.sStore.service.CartService;
+import com.pproject.sStore.service.OrderService;
 import com.pproject.sStore.service.ProductService;
 import com.pproject.sStore.service.UserService;
 
@@ -32,12 +34,15 @@ public class Controler {
 	private final UserService userService;
 	private final ProductService productService;
 	private final CartService cartService;
+	private final OrderService orderService;
 
 	@Autowired
-	public Controler(UserService userService, ProductService productService, CartService cartService) {
+	public Controler(UserService userService, ProductService productService, CartService cartService,
+			OrderService orderService) {
 		this.userService = userService;
 		this.productService = productService;
 		this.cartService = cartService;
+		this.orderService = orderService;
 	}
 
 	@GetMapping
@@ -50,7 +55,24 @@ public class Controler {
 	}
 
 	@GetMapping(value = "/shop")
-	public String shop(Model model) {
+	public String shop(
+			@RequestParam(name = "pageNum") Optional<Integer> pageNum,
+			@RequestParam(name = "search") Optional<String> search,
+			@RequestParam(name = "gender") Optional<Integer> gender,
+			@RequestParam(name = "type") Optional<String> type,
+			Model model) {
+		Page<Product> page = productService.getPageProduct(
+				pageNum.orElse(1),
+				search.orElse(""),
+				gender.orElse(-1),
+				type.orElse(""));
+		model.addAttribute("totalPages", page.getTotalPages());
+		model.addAttribute("currentPage", pageNum.orElse(1));
+		model.addAttribute("totalItems", page.getTotalElements());
+		model.addAttribute("products", page.getContent());
+		model.addAttribute("search", search.orElse(""));
+		model.addAttribute("gender", gender.orElse(-1));
+		model.addAttribute("type", type.orElse(""));
 		return "shop";
 	}
 
@@ -77,8 +99,18 @@ public class Controler {
 	}
 
 	@GetMapping(value = "/cart")
-	public String cart(Model model) {
-		return "cart";
+	public String cart(Model model, HttpSession session) {
+		try {
+			User user = (User) session.getAttribute("USER");
+			List<ProductItem> cartItems = cartService.getCartItems(user.getId());
+			Long subTotal = cartService.getSubTotal(user.getId());
+			model.addAttribute("cartItems", cartItems);
+			model.addAttribute("subTotal", subTotal);
+			return "cart";
+		} catch (Exception e) {
+			model.addAttribute("message", "You are not login in");
+			return "404";
+		}
 	}
 
 	@PostMapping("/register")
@@ -88,10 +120,10 @@ public class Controler {
 			session.setAttribute("USER", u);
 			return "redirect:/sStore/";
 		} catch (Exception e) {
-			model.addAttribute("registerMessage", "Email or phone number taken");
+			e.printStackTrace();
+			model.addAttribute("message", "Email or phone number taken");
 			return "404";
 		}
-
 	}
 
 	@PostMapping(value = "/login")
@@ -101,7 +133,7 @@ public class Controler {
 			session.setAttribute("USER", u);
 			return "redirect:/sStore/";
 		} catch (Exception e) {
-			model.addAttribute("loginMessage", "Email or password incorrect");
+			model.addAttribute("message", "Email or password incorrect");
 			return "404";
 		}
 	}
@@ -116,18 +148,51 @@ public class Controler {
 	@ResponseBody
 	public String addToCart(
 			ProductItem productItem,
-			@RequestParam(name = "userId") Long userId,
-			@RequestParam(name = "productId") Long productId) {
-		return cartService.addToCart(productItem, userId, productId);
+			@RequestParam(name = "productId") Long productId,
+			HttpSession session,
+			Model model) {
+		try {
+			User user = (User) session.getAttribute("USER");
+			return cartService.addToCart(productItem, user.getId(), productId);
+		} catch (Exception e) {
+			return e.getMessage();
+		}
+	}
+
+	@GetMapping(value = "/del-cart-item")
+	public String delCartItem(
+			@RequestParam(name = "itemId") Long itemId,
+			HttpSession session,
+			Model model) {
+		try {
+			cartService.delCartItem(itemId);
+			return "redirect:cart";
+		} catch (Exception e) {
+			model.addAttribute("message", e.getMessage());
+			return "404";
+		}
+	}
+
+	@GetMapping(value = "/newOrder")
+	@ResponseBody
+	public String newOrder(HttpSession session) {
+		try {
+			User user = (User) session.getAttribute("USER");
+			orderService.newOrder(user.getId());
+			return "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "failed";
 	}
 
 	/* ADMIN */
-	@GetMapping(value = "/admin")
+	@GetMapping(value = "/admin_dashboard")
 	public String adminHome() {
 		return "adminDashboard";
 	}
 
-	@GetMapping(value = "/admin/store")
+	@GetMapping(value = "/admin_store")
 	public String adminStore(
 			@RequestParam(name = "search", required = false, defaultValue = "") String search,
 			@RequestParam(name = "filterMode", required = false, defaultValue = "0") Long filterMode,
@@ -156,7 +221,7 @@ public class Controler {
 			return "404";
 		}
 		// System.out.println("add Successful");
-		return "redirect:../admin/store";
+		return "redirect:../admin_store";
 	}
 
 	@PostMapping(value = "/admin/editProduct")
@@ -171,12 +236,12 @@ public class Controler {
 			model.addAttribute("EditProductMessage", e);
 			return "404";
 		}
-		return "redirect:../admin/store";
+		return "redirect:../admin_store";
 	}
 
 	@GetMapping(value = "/admin/delProduct/{pid}")
 	public String delProduct(@PathVariable("pid") Long pid) {
 		productService.delProduct(pid);
-		return "redirect:../../admin/store";
+		return "redirect:../../admin_store";
 	}
 }
