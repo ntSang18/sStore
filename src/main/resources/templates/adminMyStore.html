@@ -27,7 +27,7 @@
 			<main>
 				<div class="head-title">
 					<div class="left">
-						<a th:href="@{/sStore/admin/store}"
+						<a th:href="@{/sStore/admin-store}"
 							><h1>My Store</h1></a
 						>
 						<p class="breadcrumb">Manage all your products</p>
@@ -48,7 +48,7 @@
 						<div class="head">
 							<h3>Products</h3>
 							<form
-								th:action="@{/sStore/admin/store}"
+								th:action="@{/sStore/admin-store}"
 								method="get"
 								id="form-search"
 							>
@@ -72,25 +72,25 @@
 										></i>
 										<div class="menu">
 											<a
-												th:href="@{/sStore/admin/store(filterMode=1)}"
+												th:href="@{/sStore/admin-store(filterMode=1)}"
 												><i class="bx bx-up-arrow-alt"
 													>Price
 												</i></a
 											>
 											<a
-												th:href="@{/sStore/admin/store(filterMode=2)}"
+												th:href="@{/sStore/admin-store(filterMode=2)}"
 												><i class="bx bx-down-arrow-alt"
 													>Price
 												</i></a
 											>
 											<a
-												th:href="@{/sStore/admin/store(filterMode=3)}"
+												th:href="@{/sStore/admin-store(filterMode=3)}"
 												><i class="bx bx-up-arrow-alt"
 													>Date Create
 												</i></a
 											>
 											<a
-												th:href="@{/sStore/admin/store(filterMode=4)}"
+												th:href="@{/sStore/admin-store(filterMode=4)}"
 												><i class="bx bx-down-arrow-alt"
 													>Date Create
 												</i></a
@@ -141,7 +141,7 @@
 											><i class="bx bx-detail"></i
 										></a>
 										<a
-											th:href="@{/sStore/admin/viewProduct/(id=${product.id})}"
+											th:href="@{/sStore/admin/viewProduct(id=${product.id})}"
 											class="btn btn-warning me-2 editBtn"
 											><i class="bx bx-pencil"></i
 										></a>
@@ -565,7 +565,7 @@
 									Available</span
 								>
 							</div>
-							<h2 id="view_price">$139.00</h2>
+							<h2 id="view_price" class="price">$139.00</h2>
 							<div class="view_select_container">
 								<select id="view_sizes">
 									<option selected>Size</option>
@@ -982,13 +982,6 @@
 		<script src="../static/js/ajax.js"></script>
 		<script src="../static/js/admin.js"></script>
 		<script>
-			new AutoNumeric.multiple(".price", {
-				decimalPlaces: "0",
-				decimalCharacter: ",",
-				digitGroupSeparator: ".",
-				currencySymbol: "₫",
-				currencySymbolPlacement: "s",
-			});
 			// Slide bar
 			const allSideMenu = document.querySelectorAll(
 				"#sidebar .side-menu.top li a"

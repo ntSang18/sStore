@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity(name = "Product")
 @Table(name = "product")
 public class Product {
@@ -61,6 +63,7 @@ public class Product {
 	private List<ProductReview> reviews = new ArrayList<ProductReview>();
 
 	@OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
+	@JsonBackReference
 	private List<ProductItem> productItems = new ArrayList<ProductItem>();
 
 	public Product() {

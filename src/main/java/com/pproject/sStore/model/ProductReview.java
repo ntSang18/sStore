@@ -30,23 +30,25 @@ public class ProductReview {
 	@JoinColumn(name = "product_id")
 	private Product product;
 
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
+
 	public ProductReview() {
 		super();
 	}
 
-	public ProductReview(int start, String review, Product product) {
+	public ProductReview(int start, String review, Product product, User user) {
 		super();
 		this.star = start;
 		this.review = review;
 		this.product = product;
+		this.user = user;
 	}
 
 	public Long getId() {
 		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public int getStar() {
@@ -71,6 +73,14 @@ public class ProductReview {
 
 	public void setProduct(Product product) {
 		this.product = product;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override

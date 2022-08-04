@@ -45,10 +45,13 @@ public class User {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "cart_id", referencedColumnName = "id")
 	private Cart cart;
-	
+
 	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Order> orders = new ArrayList<Order>();
-	
+
+	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+	private List<ProductReview> reviews = new ArrayList<ProductReview>();
+
 	public User() {
 		super();
 	}
@@ -113,7 +116,7 @@ public class User {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
-	
+
 	public Cart getCart() {
 		return cart;
 	}
@@ -129,12 +132,27 @@ public class User {
 	public void setOrders(List<Order> orders) {
 		this.orders = orders;
 	}
-	
+
 	public void addOrder(Order order) {
 		if (!this.orders.contains(order)) {
 			this.orders.add(order);
 			order.setUser(this);
 		}
+	}
+
+	public List<ProductReview> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(List<ProductReview> reviews) {
+		this.reviews = reviews;
+	}
+
+	public void copy(User user) {
+		this.userName = user.getUserName();
+		this.email = user.getEmail();
+		this.password = user.getPassword();
+		this.phoneNumber = user.getPhoneNumber();
 	}
 
 	@Override

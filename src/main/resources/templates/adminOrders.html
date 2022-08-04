@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- jQuery -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+		/>
+		<!-- box icon -->
+		<link
+			href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css"
+			rel="stylesheet"
+		/>
+		<script src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"></script>
+		<link rel="stylesheet" href="../static/css/admin.css" />
+		<title>sStore | Admin</title>
+	</head>
+	<body>
+		<section th:replace="adminDashboard :: adminSidebar"></section>
+		<section id="content">
+			<nav th:replace="adminDashboard :: adminNavbar"></nav>
+			<!-- Main content -->
+			<main>
+				<div class="head-title">
+					<div class="left">
+						<a th:href="@{/sStore/admin-orders}"><h1>Orders</h1></a>
+						<p class="breadcrumb">Manage all your orders</p>
+					</div>
+				</div>
+				<div class="table-data">
+					<div class="order">
+						<!-- Filter -->
+						<div class="head">
+							<h3>Orders</h3>
+							<form
+								th:action="@{/sStore/admin-orders}"
+								method="get"
+								id="form-search"
+							>
+								<div
+									class="d-flex justify-content-center form-search"
+								>
+									<input
+										class="mx-1"
+										type="text"
+										placeholder="Search..."
+										name="search"
+									/>
+									<i
+										class="bx bx-search me-3"
+										id="order-btnSearch"
+									></i>
+									<div id="filter">
+										<i
+											class="bx bx-filter"
+											id="btnFilter"
+										></i>
+										<div class="menu">
+											<a
+												th:href="@{/sStore/admin-orders(filterMode=1)}"
+												><i class="bx bx-up-arrow-alt"
+													>Total Price
+												</i></a
+											>
+											<a
+												th:href="@{/sStore/admin-orders(filterMode=2)}"
+												><i class="bx bx-down-arrow-alt"
+													>Total Price
+												</i></a
+											>
+											<a
+												th:href="@{/sStore/admin-orders(filterMode=3)}"
+												><i class="bx bx-up-arrow-alt"
+													>Date Create
+												</i></a
+											>
+											<a
+												th:href="@{/sStore/admin-orders(filterMode=4)}"
+												><i class="bx bx-down-arrow-alt"
+													>Date Create
+												</i></a
+											>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+						<!-- Data -->
+						<table>
+							<thead>
+								<tr>
+									<th>User Name</th>
+									<th>Total Price</th>
+									<th>Date Order</th>
+									<th>Status</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody th:each="order : ${orders}">
+								<tr>
+									<td>
+										<span th:text="${order.user.userName}"
+											>User Name</span
+										>
+									</td>
+									<td>
+										<span
+											class="price"
+											th:text="${order.totalPrice}"
+											>50000</span
+										>
+									</td>
+									<td>
+										<span th:text="${order.createAt}"
+											>Date create product</span
+										>
+									</td>
+									<td th:if="${order.status == 1}">
+										<span class="status pending">
+											Pending
+										</span>
+									</td>
+									<td th:if="${order.status == 2}">
+										<span class="status process">
+											Process
+										</span>
+									</td>
+									<td th:if="${order.status == 3}">
+										<span class="status completed">
+											Completed
+										</span>
+									</td>
+									<td th:if="${order.status == 1}">
+										<a
+											th:href="@{/sStore/view-order(id=${order.id})}"
+											class="btn btn-primary me-2 orders-view-order"
+											><i class="bx bx-detail"></i
+										></a>
+										<a
+											th:href="@{/sStore/admin/confirmOrder(id=${order.id})}"
+											class="btn btn-success me-2 orders-confirm-order"
+											><i class="bx bx-check"></i
+										></a>
+										<a
+											th:href="@{/sStore/admin/delOrder/{oid}(oid=${order.id})}"
+											class="btn btn-danger orders-del-order"
+											><i class="bx bx-trash-alt"></i
+										></a>
+									</td>
+									<td th:unless="${order.status == 1}">
+										<a
+											th:href="@{/sStore/admin/viewOrder(id=${order.id})}"
+											class="btn btn-primary me-2 orders-view-order"
+											><i class="bx bx-detail"></i
+										></a>
+										<a
+											th:href="@{/sStore/admin/delOrder/{oid}(oid=${order.id})}"
+											class="btn btn-danger orders-del-order"
+											><i class="bx bx-trash-alt"></i
+										></a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</main>
+		</section>
+
+		<!-- Modal -->
+		<!-- View Order Modal -->
+		<div
+			class="modal fade"
+			id="orders-view-order"
+			tabindex="-1"
+			aria-labelledby="orders-view-order"
+			aria-hidden="true"
+		>
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content p-3 view-order">
+					<div class="order-title">
+						ORDER DETAILS
+						<span id="total-quantity">(5 products)</span>
+					</div>
+					<div class="order-items-list">
+						<!-- <div class="order-item">
+							<img
+								src="../static/uploads/product_images/1/1.png"
+							/>
+							<div class="order-item-info">
+								<span>QUẦN SHORT FORM A</span>
+								<span>Adidas</span>
+								<div class="order-item-info-variants">
+									<label class="color">
+										<span>Kem</span>
+									</label>
+									<div class="size">S</div>
+								</div>
+								<div class="order-item-info-price price">
+									880000
+								</div>
+							</div>
+							<div class="order-item-info-quantity">
+								<span>QUANTITY</span>
+								<span> 2 </span>
+							</div>
+						</div>
+						<div class="order-item">
+							<img
+								src="../static/uploads/product_images/1/1.png"
+							/>
+							<div class="order-item-info">
+								<span>QUẦN SHORT FORM A</span>
+								<span>Adidas</span>
+								<div class="order-item-info-variants">
+									<label class="color">
+										<span>Kem</span>
+									</label>
+									<div class="size">S</div>
+								</div>
+								<div class="order-item-info-price price">
+									880000
+								</div>
+							</div>
+							<div class="order-item-info-quantity">
+								<span>QUANTITY</span>
+								<span> 2 </span>
+							</div>
+						</div> -->
+					</div>
+					<div class="btn-group">
+						<a href="#" id="order-btnConfirm">Confirm</a>
+						<a href="#" id="order-btnDel">Delete</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Confirm Order Modal -->
+		<div
+			class="modal fade"
+			id="orders-confirm-order"
+			tabindex="-1"
+			aria-labelledby="orders-confirm-order"
+			aria-hidden="true"
+		>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">
+							Confirm Order
+						</h5>
+					</div>
+					<div class="modal-body">
+						Are you sure you want to confirm this order?
+					</div>
+					<div class="modal-footer">
+						<a href="#">Confirm</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Confirm Order Modal -->
+		<div
+			class="modal fade"
+			id="orders-del-order"
+			tabindex="-1"
+			aria-labelledby="orders-del-order"
+			aria-hidden="true"
+		>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">
+							Delete Order
+						</h5>
+					</div>
+					<div class="modal-body">
+						Are you sure you want to delete this order?
+					</div>
+					<div class="modal-footer">
+						<a href="#">Delete</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="../static/js/ajax.js"></script>
+	<script src="../static/js/admin.js"></script>
+	<script>
+		// Slide bar
+		const allSideMenu = document.querySelectorAll(
+			"#sidebar .side-menu.top li a"
+		);
+		allSideMenu.forEach((item) => {
+			item.parentElement.classList.remove("active");
+		});
+		allSideMenu[2].parentElement.classList.add("active");
+	</script>
+</html>

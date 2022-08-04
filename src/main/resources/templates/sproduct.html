@@ -1,7 +1,28 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<div th:replace="index :: header"></div>
+		<!-- <div th:replace="index :: header"></div> -->
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- jQuery -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<!-- BootStrap CSS-->
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+		/>
+		<!-- BoxIcons -->
+		<link
+			href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+			rel="stylesheet"
+		/>
+		<!-- Autonumeric -->
+		<script src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"></script>
+		<!-- Sweetalert -->
+		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<!-- style -->
+		<link rel="stylesheet" href="../static/css/style.css" />
 		<title>sStore | Details Product</title>
 	</head>
 	<body>
@@ -51,7 +72,7 @@
 				<h4 th:text="${product.productName}">Men's Fashion T Shirt</h4>
 				<div>
 					<div class="star">
-						<span><strong>4.8</strong></span>
+						<span><strong class="number-rating">4.8</strong></span>
 						<i class="bx bxs-star"></i>
 						<i class="bx bxs-star"></i>
 						<i class="bx bxs-star"></i>
@@ -138,6 +159,137 @@
 					step.</span
 				>
 			</div>
+		</section>
+
+		<section id="reviews">
+			<div class="reviews-heading">
+				<span>Comments</span>
+				<h2>Customer Reviews</h2>
+			</div>
+			<div class="list-review">
+				<div class="review-box">
+					<div class="box-top">
+						<div class="profile">
+							<div class="profile-img">
+								<img src="../static/image/user.png" />
+							</div>
+							<div class="name-user">
+								<strong>Nguyễn Thanh Sang</strong>
+								<span>thanhsang6325@gmail.com</span>
+							</div>
+						</div>
+						<div class="stars">
+							<i class="bx bxs-star"></i>
+							<i class="bx bxs-star"></i>
+							<i class="bx bxs-star"></i>
+							<i class="bx bxs-star"></i>
+							<i class="bx bx-star"></i>
+						</div>
+					</div>
+					<div class="review">
+						<p>
+							Lorem ipsum dolor sit, amet consectetur adipisicing
+							elit. Eos, saepe ea eum qui inventore molestiae,
+							ipsa perferendis, quae reprehenderit quod soluta?
+							Obcaecati a perferendis iure at porro neque eius
+							illum.
+						</p>
+					</div>
+				</div>
+				<div class="review-box">
+					<div class="box-top">
+						<div class="profile">
+							<div class="profile-img">
+								<img src="../static/image/user.png" />
+							</div>
+							<div class="name-user">
+								<strong>Nguyễn Thanh Sang</strong>
+								<span>thanhsang6325@gmail.com</span>
+							</div>
+						</div>
+						<div class="stars">
+							<i class="bx bxs-star"></i>
+							<i class="bx bxs-star"></i>
+							<i class="bx bxs-star"></i>
+							<i class="bx bxs-star"></i>
+							<i class="bx bx-star"></i>
+						</div>
+					</div>
+					<div class="review">
+						<p>
+							Lorem ipsum dolor sit, amet consectetur adipisicing
+							elit. Eos, saepe ea eum qui inventore molestiae,
+							ipsa perferendis, quae reprehenderit quod soluta?
+							Obcaecati a perferendis iure at porro neque eius
+							illum.
+						</p>
+					</div>
+				</div>
+				<div class="review-box">
+					<div class="box-top">
+						<div class="profile">
+							<div class="profile-img">
+								<img src="../static/image/user.png" />
+							</div>
+							<div class="name-user">
+								<strong>Nguyễn Thanh Sang</strong>
+								<span>thanhsang6325@gmail.com</span>
+							</div>
+						</div>
+						<div class="stars">
+							<i class="bx bxs-star"></i>
+							<i class="bx bxs-star"></i>
+							<i class="bx bxs-star"></i>
+							<i class="bx bxs-star"></i>
+							<i class="bx bx-star"></i>
+						</div>
+					</div>
+					<div class="review">
+						<p>
+							Lorem ipsum dolor sit, amet consectetur adipisicing
+							elit. Eos, saepe ea eum qui inventore molestiae,
+							ipsa perferendis, quae reprehenderit quod soluta?
+							Obcaecati a perferendis iure at porro neque eius
+							illum.
+						</p>
+					</div>
+				</div>
+				<div class="review-box">
+					<div class="box-top">
+						<div class="profile">
+							<div class="profile-img">
+								<img src="../static/image/user.png" />
+							</div>
+							<div class="name-user">
+								<strong>Nguyễn Thanh Sang</strong>
+								<span>thanhsang6325@gmail.com</span>
+							</div>
+						</div>
+						<div class="stars">
+							<i class="bx bxs-star"></i>
+							<i class="bx bxs-star"></i>
+							<i class="bx bxs-star"></i>
+							<i class="bx bxs-star"></i>
+							<i class="bx bx-star"></i>
+						</div>
+					</div>
+					<div class="review">
+						<p>
+							Lorem ipsum dolor sit, amet consectetur adipisicing
+							elit. Eos, saepe ea eum qui inventore molestiae,
+							ipsa perferendis, quae reprehenderit quod soluta?
+							Obcaecati a perferendis iure at porro neque eius
+							illum.
+						</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section id="pagination" class="section-p1">
+			<a href="#">1</a>
+			<a href="#">2</a>
+			<a href="#"><i class="bx bxs-right-arrow-alt"></i></a>
 		</section>
 
 		<section id="product1" class="section-p1">

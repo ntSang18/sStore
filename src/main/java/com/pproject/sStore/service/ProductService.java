@@ -17,14 +17,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.pproject.sStore.model.Order;
 import com.pproject.sStore.model.Product;
 import com.pproject.sStore.model.ProductColor;
 import com.pproject.sStore.model.ProductImage;
+import com.pproject.sStore.model.ProductItem;
+import com.pproject.sStore.model.ProductReview;
 import com.pproject.sStore.model.ProductSize;
+import com.pproject.sStore.model.User;
 import com.pproject.sStore.repository.ProductColorRepository;
 import com.pproject.sStore.repository.ProductImageRepository;
+import com.pproject.sStore.repository.ProductItemRepository;
 import com.pproject.sStore.repository.ProductRepository;
+import com.pproject.sStore.repository.ProductReviewRepository;
 import com.pproject.sStore.repository.ProductSizeRepository;
+
 
 @Service
 public class ProductService {
@@ -36,17 +43,23 @@ public class ProductService {
 	private final ProductImageRepository productImageRepository;
 	private final ProductSizeRepository productSizeRepository;
 	private final ProductColorRepository productColorRepository;
+	private final ProductItemRepository productItemRepository;
+	private final ProductReviewRepository productReviewRepository;
 
 	@Autowired
 	public ProductService(ProductRepository productRepository,
 			ProductImageRepository productImageRepository,
 			ProductSizeRepository productSizeRepository,
-			ProductColorRepository productColorRepository) {
+			ProductColorRepository productColorRepository,
+			ProductItemRepository productItemRepository,
+			ProductReviewRepository productReviewRepository) {
 		super();
 		this.productRepository = productRepository;
 		this.productImageRepository = productImageRepository;
 		this.productSizeRepository = productSizeRepository;
 		this.productColorRepository = productColorRepository;
+		this.productItemRepository = productItemRepository;
+		this.productReviewRepository = productReviewRepository;
 	}
 
 	public List<Product> getAllProduct() {
@@ -217,6 +230,21 @@ public class ProductService {
 		File delFolder = new File(LOCATION + "/" + delProduct.getId());
 		delFolder.delete();
 		productRepository.deleteById(pid);
+	}
+
+	public void reviewProduct(ProductReview review, Long piid, User user) {
+		try {
+			ProductItem productItem = productItemRepository.findById(piid)
+					.orElseThrow(() -> new IllegalStateException("Product Item doest not exit"));
+			Product product = productItem.getProduct();
+			productItem.setStatus(4);
+			review.setProduct(product);
+			review.setUser(user);
+			productItemRepository.save(productItem);
+			productReviewRepository.save(review);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private boolean isFilesEmpty(MultipartFile[] files) {

@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.pproject.sStore.model.Address;
+import com.pproject.sStore.model.Order;
 import com.pproject.sStore.model.Product;
 import com.pproject.sStore.model.ProductItem;
+import com.pproject.sStore.model.ProductReview;
 import com.pproject.sStore.model.User;
 import com.pproject.sStore.service.CartService;
 import com.pproject.sStore.service.OrderService;
@@ -98,6 +100,36 @@ public class Controler {
 		return "contact";
 	}
 
+	@GetMapping(value = "/account")
+	public String account(Model model, HttpSession session) {
+		try {
+			User user = userService.getUserById(((User) session.getAttribute("USER")).getId());
+			List<Order> orders = orderService.getUserOrders(user.getId());
+			model.addAttribute("user", user);
+			model.addAttribute("orders", orders);
+			return "account";
+		} catch (Exception e) {
+			model.addAttribute("message", "You are not login in");
+			return "404";
+		}
+	}
+
+	@PostMapping(value = "/review-product")
+	@ResponseBody
+	public String reviewProduct(
+			ProductReview review,
+			@RequestParam(name = "piid") Long piid,
+			HttpSession session) {
+		try {
+			User user = (User) session.getAttribute("USER");
+			productService.reviewProduct(review, piid, user);
+			return "Thanks for rating us!";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}
+	}
+
 	@GetMapping(value = "/cart")
 	public String cart(Model model, HttpSession session) {
 		try {
@@ -135,6 +167,19 @@ public class Controler {
 		} catch (Exception e) {
 			model.addAttribute("message", "Email or password incorrect");
 			return "404";
+		}
+	}
+
+	@PostMapping(value = "/edit-user")
+	@ResponseBody
+	public String editUser(User user, Address address, HttpSession session) {
+		try {
+			User u = userService.editUser(user, address, ((User) session.getAttribute("USER")).getId());
+			session.setAttribute("USER", u);
+			return "Edit user successfully!";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return e.getMessage();
 		}
 	}
 
@@ -187,12 +232,12 @@ public class Controler {
 	}
 
 	/* ADMIN */
-	@GetMapping(value = "/admin_dashboard")
+	@GetMapping(value = "/admin-dashboard")
 	public String adminHome() {
 		return "adminDashboard";
 	}
 
-	@GetMapping(value = "/admin_store")
+	@GetMapping(value = "/admin-store")
 	public String adminStore(
 			@RequestParam(name = "search", required = false, defaultValue = "") String search,
 			@RequestParam(name = "filterMode", required = false, defaultValue = "0") Long filterMode,
@@ -200,6 +245,16 @@ public class Controler {
 		List<Product> products = productService.getListProduct(search, filterMode);
 		model.addAttribute("products", products);
 		return "adminMyStore";
+	}
+
+	@GetMapping(value = "/admin-orders")
+	public String adminOrders(
+			@RequestParam(name = "search", required = false, defaultValue = "") String search,
+			@RequestParam(name = "filterMode", required = false, defaultValue = "0") Long filterMode,
+			Model model) {
+		List<Order> orders = orderService.getListAdminOrder(search, filterMode);
+		model.addAttribute("orders", orders);
+		return "adminOrders";
 	}
 
 	@GetMapping(value = "/admin/viewProduct")
@@ -221,7 +276,7 @@ public class Controler {
 			return "404";
 		}
 		// System.out.println("add Successful");
-		return "redirect:../admin_store";
+		return "redirect:../admin-store";
 	}
 
 	@PostMapping(value = "/admin/editProduct")
@@ -236,12 +291,30 @@ public class Controler {
 			model.addAttribute("EditProductMessage", e);
 			return "404";
 		}
-		return "redirect:../admin_store";
+		return "redirect:../admin-store";
 	}
 
 	@GetMapping(value = "/admin/delProduct/{pid}")
 	public String delProduct(@PathVariable("pid") Long pid) {
 		productService.delProduct(pid);
-		return "redirect:../../admin_store";
+		return "redirect:../../admin-store";
+	}
+
+	@GetMapping(value = "/view-order")
+	@ResponseBody
+	public Order viewOrder(Long id) {
+		return orderService.getOrderById(id);
+	}
+
+	@GetMapping(value = "/admin/confirmOrder")
+	public String confirmOrder(Long id) {
+		orderService.confirmOrder(id);
+		return "redirect:../admin-orders";
+	}
+
+	@GetMapping(value = "/admin/delOrder/{oid}")
+	public String adminDelOrder(@PathVariable("oid") Long oid) {
+		orderService.adminDelOrder(oid);
+		return "redirect:../../admin-orders";
 	}
 }

@@ -49,7 +49,7 @@
 					<li><a th:href="@{/sStore/blog}">Blog</a></li>
 					<li><a th:href="@{/sStore/contact}">Contact</a></li>
 					<li th:if="${session.USER}">
-						<a href="">Account</a>
+						<a th:href="@{/sStore/account}">Account</a>
 					</li>
 					<li th:unless="${session.USER}">
 						<a
@@ -440,7 +440,7 @@
 										<div class="col-lg-4 my-2">
 											<select
 												id="province"
-												class="form-control"
+												class="form-control province"
 												required
 												name="province"
 											>
@@ -452,7 +452,7 @@
 										<div class="col-lg-4 my-2">
 											<select
 												id="district"
-												class="form-control"
+												class="form-control district"
 												required
 												name="district"
 											>
@@ -464,7 +464,7 @@
 										<div class="col-lg-4 my-2">
 											<select
 												id="ward"
-												class="form-control"
+												class="form-control ward"
 												required
 												name="ward"
 											>

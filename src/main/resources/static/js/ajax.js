@@ -38,14 +38,14 @@ $(document).ready(function () {
 			}
 			$("#view_productName").html(product.productName);
 			$("#view_available").html(product.available);
-			if (product.price % 1000 == 0) {
-				$("#view_price").html(
-					product.price / 1000 + "." + "000" + "&#8363;"
-				);
-			} else {
-				$("#view_price").html(product.price / 1000 + "&#8363;");
-			}
-
+			$("#view_price").html(product.price);
+			new AutoNumeric.multiple(".price", {
+				decimalPlaces: "0",
+				decimalCharacter: ",",
+				digitGroupSeparator: ".",
+				currencySymbol: "₫",
+				currencySymbolPlacement: "s",
+			});
 			$("#view_sizes")
 				.empty()
 				.append('<option selected="selected" value="">Sizes</option>');
@@ -137,4 +137,89 @@ $(document).ready(function () {
 	$("#btnSearch").on("click", function () {
 		$("#form-search").submit();
 	});
+
+	/*Orders*/
+	$(".orders-view-order").on("click", function (event) {
+		event.preventDefault();
+		var href = $(this).attr("href");
+		$.get(href, function (order, status) {
+			$("#orders-view-order #total-quantity").html(
+				"(" + order.totalQuantity + " products)"
+			);
+
+			let items = "";
+			for (let i = 0; i < order.items.length; i++) {
+				items += `<div class="order-item">
+						<img
+							src=${order.items[i].product.images[0].image}
+						/>
+						<div class="order-item-info">
+							<span>${order.items[i].product.productName}</span>
+							<span>${order.items[i].product.branch}</span>
+							<div class="order-item-info-variants">
+								<label class="color">
+									<span id="${order.items[i].id}-${order.items[i].color}">Kem</span>
+								</label>
+								<div class="size">${order.items[i].size}</div>
+							</div>
+							<div class="order-item-info-price price">
+								${order.items[i].quantity * order.items[i].product.price}
+							</div>
+						</div>
+						<div class="order-item-info-quantity">
+							<span>QUANTITY</span>
+							<span> ${order.items[i].quantity} </span>
+						</div>
+					</div>`;
+			}
+			$("#orders-view-order .order-items-list").html(items);
+			$("#orders-view-order #order-btnConfirm").attr(
+				"href",
+				"/sStore/admin/confirmOrder?id=" + order.id
+			);
+			$("#orders-view-order #order-btnDel").attr(
+				"href",
+				"/sStore/admin/delOrder/" + order.id
+			);
+			if (order.status != 1) {
+				$("#orders-view-order #order-btnConfirm").hide();
+			}
+			$("#orders-view-order").modal("show");
+			$(".color span").each(function () {
+				var color = this.id.split("-")[1];
+				$(this).css(
+					"background-image",
+					"url(../static/color/" + color + ".png)"
+				);
+			});
+			new AutoNumeric.multiple(".price", {
+				decimalPlaces: "0",
+				decimalCharacter: ",",
+				digitGroupSeparator: ".",
+				currencySymbol: "₫",
+				currencySymbolPlacement: "s",
+			});
+		});
+	});
+
+	$(".orders-confirm-order").on("click", function (event) {
+		event.preventDefault();
+		var href = $(this).attr("href");
+		$("#orders-confirm-order a").attr("href", href);
+		$("#orders-confirm-order").modal("show");
+	});
+
+	$(".orders-del-order").on("click", function (event) {
+		event.preventDefault();
+		var href = $(this).attr("href");
+		$("#orders-del-order a").attr("href", href);
+		$("#orders-del-order").modal("show");
+	});
+});
+new AutoNumeric.multiple(".price", {
+	decimalPlaces: "0",
+	decimalCharacter: ",",
+	digitGroupSeparator: ".",
+	currencySymbol: "₫",
+	currencySymbolPlacement: "s",
 });

@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity(name = "Order")
 @Table(name = "orders")
 public class Order {
@@ -28,11 +30,21 @@ public class Order {
 	private LocalDate createAt;
 
 	@Column(nullable = false)
+	private Integer totalQuantity;
+
+	@Column(nullable = false)
+	private Long totalPrice;
+
+	@Column(nullable = false)
 	private int status;
+
+	@Column(nullable = false)
+	private int adminVisible;
 
 	@OneToMany(mappedBy = "order", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<ProductItem> items = new ArrayList<ProductItem>();
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -44,7 +56,10 @@ public class Order {
 	public Order(LocalDate createAt, int status, User user) {
 		super();
 		this.createAt = createAt;
+		this.totalQuantity = 0;
+		this.totalPrice = 0L;
 		this.status = status;
+		this.adminVisible = 1;
 		this.user = user;
 	}
 
@@ -60,6 +75,22 @@ public class Order {
 		this.createAt = createAt;
 	}
 
+	public Long getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(Long totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+
+	public Integer getTotalQuantity() {
+		return totalQuantity;
+	}
+
+	public void setTotalQuantity(Integer totalQuantity) {
+		this.totalQuantity = totalQuantity;
+	}
+
 	public int getStatus() {
 		return status;
 	}
@@ -68,12 +99,24 @@ public class Order {
 		this.status = status;
 	}
 
+	public int getAdminVisible() {
+		return adminVisible;
+	}
+
+	public void setAdminVisible(int adminVisible) {
+		this.adminVisible = adminVisible;
+	}
+
 	public List<ProductItem> getItems() {
 		return items;
 	}
 
 	public void setItems(List<ProductItem> items) {
 		this.items = items;
+	}
+
+	public void addItem(ProductItem item) {
+		this.items.add(item);
 	}
 
 	public User getUser() {

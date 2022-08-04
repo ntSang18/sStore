@@ -9,6 +9,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity(name = "ProductItem")
 @Table(name = "product_item")
 public class ProductItem {
@@ -32,12 +35,15 @@ public class ProductItem {
 
 	@ManyToOne
 	@JoinColumn(name = "product_id")
+	@JsonManagedReference
 	private Product product;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "cart_id")
 	private Cart cart;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "order_id")
 	private Order order;

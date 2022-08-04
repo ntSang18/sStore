@@ -14,8 +14,6 @@
 		/>
 		<!-- My CSS -->
 		<link rel="stylesheet" href="../static/css/admin.css" />
-		<!-- <link rel="stylesheet" href="../static/css/adminHome.css" /> -->
-
 		<title>sStore | Admin</title>
 	</head>
 	<body>
@@ -26,20 +24,20 @@
 				<span class="text">Admin</span>
 			</a>
 			<ul class="side-menu top ps-0">
-				<li class="active">
-					<a href="/sStore/admin_dashboard">
+				<li>
+					<a href="/sStore/admin-dashboard">
 						<i class="bx bxs-dashboard"></i>
 						<span class="text">Dashboard</span>
 					</a>
 				</li>
 				<li>
-					<a href="/sStore/admin_store">
+					<a href="/sStore/admin-store">
 						<i class="bx bxs-shopping-bag-alt"></i>
 						<span class="text">My Store</span>
 					</a>
 				</li>
 				<li>
-					<a href="/sStore/admin_order">
+					<a href="/sStore/admin-orders">
 						<i class="bx bxs-notepad"></i>
 						<span class="text">Orders</span>
 					</a>
@@ -250,7 +248,16 @@
 			<!-- MAIN -->
 		</section>
 		<!-- CONTENT -->
-
 		<script src="../static/js/admin.js"></script>
+		<script>
+			// Slide bar
+			const allSideMenu = document.querySelectorAll(
+				"#sidebar .side-menu.top li a"
+			);
+			allSideMenu.forEach((item) => {
+				item.parentElement.classList.remove("active");
+			});
+			allSideMenu[0].parentElement.classList.add("active");
+		</script>
 	</body>
 </html>

@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity(name = "Address")
 @Table(name = "address")
 public class Address {
@@ -29,6 +31,7 @@ public class Address {
 	@Column(nullable = false, columnDefinition = "TEXT")
 	private String detailAddress;
 
+	@JsonIgnore
 	@OneToOne(mappedBy = "address")
 	private User user;
 
@@ -91,6 +94,13 @@ public class Address {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public void copy(Address address) {
+		this.province = address.getProvince();
+		this.district = address.getDistrict();
+		this.ward = address.getWard();
+		this.detailAddress = address.getDetailAddress();
 	}
 
 	@Override
