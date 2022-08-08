@@ -21,6 +21,7 @@
 	</head>
 	<body>
 		<section th:replace="adminDashboard :: adminSidebar"></section>
+		
 		<section id="content">
 			<nav th:replace="adminDashboard :: adminNavbar"></nav>
 			<!-- Main content -->
@@ -37,7 +38,7 @@
 						<div class="head">
 							<h3>Orders</h3>
 							<form
-								th:action="@{/sStore/admin-orders}"
+								th:action="@{/sStore/admin-customers}"
 								method="get"
 								id="form-search"
 							>
@@ -52,7 +53,7 @@
 									/>
 									<i
 										class="bx bx-search me-3"
-										id="order-btnSearch"
+										id="btnSearch"
 									></i>
 									<div id="filter">
 										<i
@@ -250,7 +251,7 @@
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">
+						<h5 class="modal-title">
 							Confirm Order
 						</h5>
 					</div>
@@ -274,7 +275,7 @@
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">
+						<h5 class="modal-title">
 							Delete Order
 						</h5>
 					</div>

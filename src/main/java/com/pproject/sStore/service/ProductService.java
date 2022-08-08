@@ -17,7 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.pproject.sStore.model.Order;
 import com.pproject.sStore.model.Product;
 import com.pproject.sStore.model.ProductColor;
 import com.pproject.sStore.model.ProductImage;
@@ -31,7 +30,6 @@ import com.pproject.sStore.repository.ProductItemRepository;
 import com.pproject.sStore.repository.ProductRepository;
 import com.pproject.sStore.repository.ProductReviewRepository;
 import com.pproject.sStore.repository.ProductSizeRepository;
-
 
 @Service
 public class ProductService {
@@ -84,7 +82,7 @@ public class ProductService {
 
 	public List<Product> getListProduct(String search, Long filterMode) {
 		List<Product> products = new ArrayList<Product>();
-		if (search.trim() == "") {
+		if (search.trim().equals("")) {
 			products = getAllProduct();
 		} else {
 			for (Product p : getAllProduct()) {
@@ -143,6 +141,23 @@ public class ProductService {
 	public Product getProductById(Long id) {
 		return productRepository.findById(id)
 				.orElseThrow(() -> new IllegalStateException("Product by id " + id + "does not exists"));
+	}
+
+	public Page<ProductReview> getPageProductReview(Long product_id, int pageNum) {
+		return productReviewRepository.getPageProductReview(product_id, PageRequest.of(pageNum - 1, 4));
+	}
+
+	public Double getProductRating(Long product_id) {
+		double rate = 0;
+		List<ProductReview> reviews = productReviewRepository.getListProductReview(product_id);
+		if (reviews.size() == 0) {
+			return 5.0;
+		}
+		for (ProductReview review : reviews) {
+			rate += review.getStar();
+		}
+		rate = rate / reviews.size();
+		return (double) Math.round(rate * 10) / 10;
 	}
 
 	public Product addProduct(Product product, MultipartFile[] files, List<String> sizes, List<String> colors)

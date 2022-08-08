@@ -1,14 +1,16 @@
 package com.pproject.sStore.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.pproject.sStore.model.Address;
 import com.pproject.sStore.model.Cart;
 import com.pproject.sStore.model.User;
 import com.pproject.sStore.repository.AddressRepository;
 import com.pproject.sStore.repository.CartRepository;
 import com.pproject.sStore.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -25,11 +27,31 @@ public class UserService {
 		this.addressRepository = addressRepository;
 		this.cartRepository = cartRepository;
 	}
+	
+	public List<User> getAllUser() {
+		return userRepository.getAllUser();
+	}
+	
+	public List<User> getListUser(String search) {
+		List<User> customers = new ArrayList<>();
+		if (search.trim().equals("")) {
+			customers = getAllUser();
+		} else {
+			for (User user : getAllUser()) {
+				if (user.getUserName().toLowerCase().contains(search.toLowerCase()) || 
+						user.getEmail().toLowerCase().contains(search.toLowerCase()) ||
+						user.getPhoneNumber().contains(search)) {
+					customers.add(user);
+				}
+			}
+		}
+		return customers;
+	}
 
 	public User getUserById(Long id) {
 		return userRepository.findById(id)
 				.orElseThrow(() -> new IllegalStateException("User by id " + id + "does not exits"));
-	};
+	}
 
 	public User register(User user, Address address) {
 		if (userRepository.findUserByEmail(user.getEmail()).isPresent()) {
@@ -43,7 +65,10 @@ public class UserService {
 		cartRepository.save(cart);
 		user.setAddress(address);
 		user.setCart(cart);
-		user.setType(1);
+		System.out.println(user.getType());
+		if (user.getType() == 0) {
+			user.setType(1);
+		}
 		return userRepository.save(user);
 	}
 

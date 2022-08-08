@@ -1,33 +1,21 @@
 package com.pproject.sStore.controler;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-
-import javax.servlet.http.HttpSession;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.pproject.sStore.model.Address;
-import com.pproject.sStore.model.Order;
-import com.pproject.sStore.model.Product;
-import com.pproject.sStore.model.ProductItem;
-import com.pproject.sStore.model.ProductReview;
-import com.pproject.sStore.model.User;
+import com.pproject.sStore.model.*;
 import com.pproject.sStore.service.CartService;
 import com.pproject.sStore.service.OrderService;
 import com.pproject.sStore.service.ProductService;
 import com.pproject.sStore.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping(path = "/sStore")
@@ -79,9 +67,18 @@ public class Controler {
 	}
 
 	@GetMapping(value = "/sproduct")
-	public String sproduct(Model model, Long id) {
+	public String sproduct(
+			Model model,
+			@RequestParam(name = "id") Long id,
+			@RequestParam(name = "pageNum") Optional<Integer> pageNum) {
 		Product product = productService.getProductById(id);
+		double rating = productService.getProductRating(id);
+		Page<ProductReview> page = productService.getPageProductReview(id, pageNum.orElse(1));
 		model.addAttribute("product", product);
+		model.addAttribute("rating", rating);
+		model.addAttribute("totalPages", page.getTotalPages());
+		model.addAttribute("currentPage", pageNum.orElse(1));
+		model.addAttribute("reviews", page.getContent());
 		return "sproduct";
 	}
 
@@ -257,6 +254,15 @@ public class Controler {
 		return "adminOrders";
 	}
 
+	@GetMapping(value = "/admin-customers")
+	public String adminCustomers(
+			@RequestParam(name = "search", required = false, defaultValue = "") String search,
+			Model model) {
+		List<User> users = userService.getListUser(search);
+		model.addAttribute("users", users);
+		return "adminCustomers";
+	}
+
 	@GetMapping(value = "/admin/viewProduct")
 	@ResponseBody
 	public Product viewProduct(Long id) {
@@ -317,4 +323,23 @@ public class Controler {
 		orderService.adminDelOrder(oid);
 		return "redirect:../../admin-orders";
 	}
+
+	@GetMapping(value = "/view-user")
+	@ResponseBody
+	public User viewUser(Long id) {
+		return userService.getUserById(id);
+	}
+
+	@PostMapping("/admin-new-account")
+	public String newAccount(User user, Address address, Model model) {
+		try {
+			User u = userService.register(user, address);
+			return "redirect:/sStore/admin-customers";
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("message", e.getMessage());
+			return "404";
+		}
+	}
+
 }

@@ -902,6 +902,20 @@ body {
 /* End Order */
 
 
+
+
+
+/*Customers*/
+#registerModal .modal-content {
+    border-radius: 30px;
+}
+
+#registerModal 	.modal-content img {
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+}
+
+
 #content main .table-data {
 	display: flex;
 	flex-wrap: wrap;

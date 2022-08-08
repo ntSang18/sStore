@@ -131,7 +131,31 @@ $(document).ready(function () {
 		}
 	});
 	// -------------------------Single Product---------------------------//
-	
+	var rating = $("#number-rating").data("rate");
+	var starsTotal = 5;
+	var starPercent = `${(rating / starsTotal) * 100}%`;
+
+	var stars = $(".stars").data("rate");
+	let inner = "";
+	if (stars == 1) {
+		inner +=
+			"<i class='bx bxs-star' ></i> <i class='bx bx-star' ></i> <i class='bx bx-star' ></i> <i class='bx bx-star' ></i> <i class='bx bx-star' ></i>";
+	} else if (stars == 2) {
+		inner +=
+			"<i class='bx bxs-star' ></i> <i class='bx bxs-star' ></i> <i class='bx bx-star' ></i> <i class='bx bx-star' ></i> <i class='bx bx-star' ></i>";
+	} else if (stars == 3) {
+		inner +=
+			"<i class='bx bxs-star' ></i> <i class='bx bxs-star' ></i> <i class='bx bxs-star' ></i> <i class='bx bx-star' ></i> <i class='bx bx-star' ></i>";
+	} else if (stars == 4) {
+		inner +=
+			"<i class='bx bxs-star' ></i> <i class='bx bxs-star' ></i> <i class='bx bxs-star' ></i> <i class='bx bxs-star' ></i> <i class='bx bx-star' ></i>";
+	} else if (stars == 5) {
+		inner +=
+			"<i class='bx bxs-star' ></i> <i class='bx bxs-star' ></i> <i class='bx bxs-star' ></i> <i class='bx bxs-star' ></i> <i class='bx bxs-star' ></i>";
+	}
+	$(".stars").html(inner);
+
+	$("#inner").css("width", starPercent);
 
 	$(".swatch-element.color label span").each(function () {
 		$(this).css(
