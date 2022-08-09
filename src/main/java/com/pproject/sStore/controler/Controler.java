@@ -231,7 +231,7 @@ public class Controler {
 	/* ADMIN */
 	@GetMapping(value = "/admin-dashboard")
 	public String adminHome() {
-		return "adminDashboard";
+		return "admin_dashboard";
 	}
 
 	@GetMapping(value = "/admin-store")
@@ -241,7 +241,7 @@ public class Controler {
 			Model model) {
 		List<Product> products = productService.getListProduct(search, filterMode);
 		model.addAttribute("products", products);
-		return "adminMyStore";
+		return "admin_store";
 	}
 
 	@GetMapping(value = "/admin-orders")
@@ -251,7 +251,7 @@ public class Controler {
 			Model model) {
 		List<Order> orders = orderService.getListAdminOrder(search, filterMode);
 		model.addAttribute("orders", orders);
-		return "adminOrders";
+		return "admin_orders";
 	}
 
 	@GetMapping(value = "/admin-customers")
@@ -260,7 +260,7 @@ public class Controler {
 			Model model) {
 		List<User> users = userService.getListUser(search);
 		model.addAttribute("users", users);
-		return "adminCustomers";
+		return "admin_customers";
 	}
 
 	@GetMapping(value = "/admin/viewProduct")

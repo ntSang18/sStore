@@ -47,10 +47,13 @@ public class User {
 	private Cart cart;
 
 	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
-	private List<Order> orders = new ArrayList<Order>();
+	private List<Order> orders = new ArrayList<>();
+
+	@OneToMany(mappedBy = "shipper", cascade = CascadeType.ALL)
+	private List<Order> shipperOrders = new ArrayList<>();
 
 	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
-	private List<ProductReview> reviews = new ArrayList<ProductReview>();
+	private List<ProductReview> reviews = new ArrayList<>();
 
 	public User() {
 		super();
@@ -138,6 +141,14 @@ public class User {
 			this.orders.add(order);
 			order.setUser(this);
 		}
+	}
+
+	public List<Order> getShipperOrders() {
+		return shipperOrders;
+	}
+
+	public void setShipperOrders(List<Order> shipperOrders) {
+		this.shipperOrders = shipperOrders;
 	}
 
 	public List<ProductReview> getReviews() {

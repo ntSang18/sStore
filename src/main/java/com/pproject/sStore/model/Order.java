@@ -49,6 +49,11 @@ public class Order {
 	@JoinColumn(name = "user_id")
 	private User user;
 
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "shipper_id")
+	private User shipper;
+
 	public Order() {
 		super();
 	}
@@ -125,6 +130,14 @@ public class Order {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public User getShipper() {
+		return shipper;
+	}
+
+	public void setShipper(User shipper) {
+		this.shipper = shipper;
 	}
 
 	@Override

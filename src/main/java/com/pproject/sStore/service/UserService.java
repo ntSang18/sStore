@@ -27,18 +27,18 @@ public class UserService {
 		this.addressRepository = addressRepository;
 		this.cartRepository = cartRepository;
 	}
-	
+
 	public List<User> getAllUser() {
 		return userRepository.getAllUser();
 	}
-	
+
 	public List<User> getListUser(String search) {
 		List<User> customers = new ArrayList<>();
 		if (search.trim().equals("")) {
 			customers = getAllUser();
 		} else {
 			for (User user : getAllUser()) {
-				if (user.getUserName().toLowerCase().contains(search.toLowerCase()) || 
+				if (user.getUserName().toLowerCase().contains(search.toLowerCase()) ||
 						user.getEmail().toLowerCase().contains(search.toLowerCase()) ||
 						user.getPhoneNumber().contains(search)) {
 					customers.add(user);

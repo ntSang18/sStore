@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<!-- jQuery -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<!-- BootStrap CSS-->
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+		/>
+		<!-- BoxIcons -->
+		<link
+			href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+			rel="stylesheet"
+		/>
+		<!-- Autonumeric -->
+		<script src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"></script>
+		<!-- Sweetalert -->
+		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<link href="../static/css/shipper.css" />
+		<title>Shipper | Available Order</title>
+	</head>
+	<body>
+		<div class="header"></div>
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="row">
+						<div class="col-sm-12 col-md-11 col-lg-10">
+							<div class="list-group">
+								<a href="#" class="list-group-item"
+									>Nguyen Thanh Sang</a
+								>
+								<a href="#" class="list-group-item"
+									>Available Orders</a
+								>
+								<a href="#" class="list-group-item"
+									>My Orders</a
+								>
+								<span class="list-group-divider"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-9 col-lg-8">
+					<h1>Available Orders</h1>
+					<div class="table-responsive">
+						<div class="dataTables_wrapper no-footer">
+							<div class="row">
+								<div class="col-sm-5">
+									<div class="dataTables_filter">
+										<label>
+											<input
+												type="search"
+												class="form-control"
+												placeholder="Filter by email, phone number"
+											/>
+										</label>
+									</div>
+								</div>
+								<div class="col-sm-7">
+									<div
+										class="dataTables_paginate paging_simple_number"
+									>
+										<a
+											class="paginate_button previous disabled"
+											>Previous</a
+										>
+										<span>
+											<a class="paginate_button current"
+												>1</a
+											>
+										</span>
+										<a class="paginate_button next disabled"
+											>Next</a
+										>
+									</div>
+								</div>
+							</div>
+							<div>
+								<table>
+									<thead>
+										<tr>
+											<th>Date</th>
+											<th>Contact</th>
+											<th>Total Price</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>
+												<small>18 06, 2001</small>
+											</td>
+											<td>
+												<div>Nguyen Thanh Sang</div>
+												<div>
+													<small>0777908037</small>
+												</div>
+											</td>
+											<td>
+												<span>$0.00</span>
+											</td>
+											<td>
+												<a>Taking</a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<!-- BootStrap JS -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+</html>
