@@ -6,6 +6,7 @@
 	</head>
 	<body>
 		<section th:replace="index :: navbar"></section>
+
 		<section id="page-header">
 			<h2>#stayhome</h2>
 			<p>Save more with coupons & up to 70% off!</p>
@@ -63,56 +64,56 @@
 								<li>
 									<a
 										th:class="${(gender == 1 && type == 'T-Shirt') ? 'dropdown-item rounded-2 active' : 'dropdown-item rounded-2'}"
-										th:href="@{/sStore/shop(gender=1, type=T-Shirt)}"
+										th:href="@{/sStore/shop(gender=1, type='T-Shirt')}"
 										>T-Shirt</a
 									>
 								</li>
 								<li>
 									<a
 										th:class="${(gender == 1 && type == 'Shirt') ? 'dropdown-item rounded-2 active' : 'dropdown-item rounded-2'}"
-										th:href="@{/sStore/shop(gender=1, type=Shirt)}"
+										th:href="@{/sStore/shop(gender=1, type='Shirt')}"
 										>Shirt</a
 									>
 								</li>
 								<li>
 									<a
 										th:class="${(gender == 1 && type == 'Polo Shirt') ? 'dropdown-item rounded-2 active' : 'dropdown-item rounded-2'}"
-										th:href="@{/sStore/shop(gender=1, type=Polo+' '+Shirt)}"
+										th:href="@{/sStore/shop(gender=1, type='Polo'+' '+'Shirt')}"
 										>Polo Shirt</a
 									>
 								</li>
 								<li>
 									<a
 										th:class="${(gender == 1 && type == 'Suit') ? 'dropdown-item rounded-2 active' : 'dropdown-item rounded-2'}"
-										th:href="@{/sStore/shop(gender=1, type=Suit)}"
+										th:href="@{/sStore/shop(gender=1, type='Suit')}"
 										>Suit</a
 									>
 								</li>
 								<li>
 									<a
 										th:class="${(gender == 1 && type == 'Hoodie') ? 'dropdown-item rounded-2 active' : 'dropdown-item rounded-2'}"
-										th:href="@{/sStore/shop(gender=1, type=Hoodie)}"
+										th:href="@{/sStore/shop(gender=1, type='Hoodie')}"
 										>Hoodie</a
 									>
 								</li>
 								<li>
 									<a
 										th:class="${(gender == 1 && type == 'Jacket') ? 'dropdown-item rounded-2 active' : 'dropdown-item rounded-2'}"
-										th:href="@{/sStore/shop(gender=1, type=Jacket)}"
+										th:href="@{/sStore/shop(gender=1, type='Jacket')}"
 										>Jacket</a
 									>
 								</li>
 								<li>
 									<a
 										th:class="${(gender == 1 && type == 'Jeans') ? 'dropdown-item rounded-2 active' : 'dropdown-item rounded-2'}"
-										th:href="@{/sStore/shop(gender=1, type=Jeans)}"
+										th:href="@{/sStore/shop(gender=1, type='Jeans')}"
 										>Jeans</a
 									>
 								</li>
 								<li>
 									<a
 										th:class="${(gender == 1 && type == 'Short') ? 'dropdown-item rounded-2 active' : 'dropdown-item rounded-2'}"
-										th:href="@{/sStore/shop(gender=1, type=Short)}"
+										th:href="@{/sStore/shop(gender=1, type='Short')}"
 										>Short</a
 									>
 								</li>
@@ -141,70 +142,70 @@
 								<li>
 									<a
 										th:class="${(gender == 0 && type=='T-Shirt') ? 'dropdown-item rounded-2 active' : 'dropdown-item rounded-2'}"
-										th:href="@{/sStore/shop(gender=0, type=T-Shirt)}"
+										th:href="@{/sStore/shop(gender=0, type='T-Shirt')}"
 										>T-Shirt</a
 									>
 								</li>
 								<li>
 									<a
 										th:class="${(gender == 0 && type=='Shirt') ? 'dropdown-item rounded-2 active' : 'dropdown-item rounded-2'}"
-										th:href="@{/sStore/shop(gender=0, type=Shirt)}"
+										th:href="@{/sStore/shop(gender=0, type='Shirt')}"
 										>Shirt</a
 									>
 								</li>
 								<li>
 									<a
 										th:class="${(gender == 0 && type=='Sweater') ? 'dropdown-item rounded-2 active' : 'dropdown-item rounded-2'}"
-										th:href="@{/sStore/shop(gender=0, type=Sweater)}"
+										th:href="@{/sStore/shop(gender=0, type='Sweater')}"
 										>Sweater</a
 									>
 								</li>
 								<li>
 									<a
 										th:class="${(gender == 0 && type=='Croptop') ? 'dropdown-item rounded-2 active' : 'dropdown-item rounded-2'}"
-										th:href="@{/sStore/shop(gender=0, type=Croptop)}"
+										th:href="@{/sStore/shop(gender=0, type='Croptop')}"
 										>Croptop</a
 									>
 								</li>
 								<li>
 									<a
 										th:class="${(gender == 0 && type=='Hoodie') ? 'dropdown-item rounded-2 active' : 'dropdown-item rounded-2'}"
-										th:href="@{/sStore/shop(gender=0, type=Hoodie)}"
+										th:href="@{/sStore/shop(gender=0, type='Hoodie')}"
 										>Hoodie</a
 									>
 								</li>
 								<li>
 									<a
 										th:class="${(gender == 0 && type=='Jacket') ? 'dropdown-item rounded-2 active' : 'dropdown-item rounded-2'}"
-										th:href="@{/sStore/shop(gender=0, type=Jacket)}"
+										th:href="@{/sStore/shop(gender=0, type='Jacket')}"
 										>Jacket</a
 									>
 								</li>
 								<li>
 									<a
 										th:class="${(gender == 0 && type=='Jeans') ? 'dropdown-item rounded-2 active' : 'dropdown-item rounded-2'}"
-										th:href="@{/sStore/shop(gender=0, type=Jeans)}"
+										th:href="@{/sStore/shop(gender=0, type='Jeans')}"
 										>Jeans</a
 									>
 								</li>
 								<li>
 									<a
 										th:class="${(gender == 0 && type=='Short') ? 'dropdown-item rounded-2 active' : 'dropdown-item rounded-2'}"
-										th:href="@{/sStore/shop(gender=0, type=Short)}"
+										th:href="@{/sStore/shop(gender=0, type='Short')}"
 										>Short</a
 									>
 								</li>
 								<li>
 									<a
 										th:class="${(gender == 0 && type=='Dress') ? 'dropdown-item rounded-2 active' : 'dropdown-item rounded-2'}"
-										th:href="@{/sStore/shop(gender=0, type=Dress)}"
+										th:href="@{/sStore/shop(gender=0, type='Dress')}"
 										>Dress</a
 									>
 								</li>
 								<li>
 									<a
 										th:class="${(gender == 0 && type=='Skirt') ? 'dropdown-item rounded-2 active' : 'dropdown-item rounded-2'}"
-										th:href="@{/sStore/shop(gender=0, type=Skirt)}"
+										th:href="@{/sStore/shop(gender=0, type='Skirt')}"
 										>Skirt</a
 									>
 								</li>

@@ -18,33 +18,36 @@
 		<script src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"></script>
 		<!-- Sweetalert -->
 		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-		<link href="../static/css/shipper.css" />
-		<title>Shipper | Available Order</title>
+		<link rel="stylesheet" href="../static/css/shipper.css" />
+		<title>Shipper | My Order</title>
 	</head>
 	<body>
 		<div class="header"></div>
-		<div class="container">
+
+		<div class="container-fluid">
 			<div class="row">
-				<div class="col-sm-3">
+				<div class="col-sm-3" style="padding-right: 50px">
 					<div class="row">
-						<div class="col-sm-12 col-md-11 col-lg-10">
+						<div class="col-sm-12">
 							<div class="list-group">
 								<a href="#" class="list-group-item"
 									>Nguyen Thanh Sang</a
 								>
-								<a href="#" class="list-group-item"
-									>Available Orders</a
+								<a href="#" class="list-group-item long-value"
+									>&nbsp;&nbsp;&nbsp;&nbsp;Available Orders</a
 								>
-								<a href="#" class="list-group-item"
-									>My Orders</a
-								>
+								<span class="list-group-item long-value">
+									&nbsp;&nbsp;&nbsp;&nbsp;<strong
+										>My Orders</strong
+									>
+								</span>
 								<span class="list-group-divider"></span>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="col-sm-9 col-lg-8">
-					<h1>Available Orders</h1>
+				<div class="col-sm-9">
+					<h1 class="a_title">Available Orders</h1>
 					<div class="table-responsive">
 						<div class="dataTables_wrapper no-footer">
 							<div class="row">
@@ -56,6 +59,9 @@
 												class="form-control"
 												placeholder="Filter by email, phone number"
 											/>
+											<i
+												class="bx bx-loader-circle bx-spin loading"
+											></i>
 										</label>
 									</div>
 								</div>
@@ -65,14 +71,19 @@
 									>
 										<a
 											class="paginate_button previous disabled"
+											href="#"
 											>Previous</a
 										>
 										<span>
-											<a class="paginate_button current"
+											<a
+												class="paginate_button current"
+												href="#"
 												>1</a
 											>
 										</span>
-										<a class="paginate_button next disabled"
+										<a
+											class="paginate_button next disabled"
+											href="#"
 											>Next</a
 										>
 									</div>
@@ -82,18 +93,25 @@
 								<table>
 									<thead>
 										<tr>
-											<th>Date</th>
+											<th class="sorting active">
+												<i class="bx bxs-sort-alt"></i
+												>Date
+											</th>
 											<th>Contact</th>
-											<th>Total Price</th>
-											<th>Action</th>
+											<th class="sorting active">
+												<i class="bx bxs-sort-alt"></i>
+												Total Price
+											</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
+										<tr class="orders2">
 											<td>
 												<small>18 06, 2001</small>
 											</td>
-											<td>
+											<td
+												class="td-word-wrap phone-with-xs"
+											>
 												<div>Nguyen Thanh Sang</div>
 												<div>
 													<small>0777908037</small>
@@ -101,9 +119,6 @@
 											</td>
 											<td>
 												<span>$0.00</span>
-											</td>
-											<td>
-												<a>Taking</a>
 											</td>
 										</tr>
 									</tbody>
@@ -114,7 +129,10 @@
 				</div>
 			</div>
 		</div>
+
+		<div th:replace="shipper_order1 :: orderDetailModal"></div>
 	</body>
 	<!-- BootStrap JS -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="../static/js/shipper.js"></script>
 </html>

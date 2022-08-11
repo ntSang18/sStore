@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<!-- jQuery -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<!-- BootStrap CSS-->
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+		/>
+		<!-- BoxIcons -->
+		<link
+			href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+			rel="stylesheet"
+		/>
+		<!-- Autonumeric -->
+		<script src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"></script>
+		<!-- Sweetalert -->
+		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<link rel="stylesheet" href="../static/css/shipper.css" />
+		<title>Shipper | Available Order</title>
+	</head>
+	<body>
+		<div class="header"></div>
+
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-3" style="padding-right: 50px">
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="list-group">
+								<a href="#" class="list-group-item"
+									>Nguyen Thanh Sang</a
+								>
+								<span class="list-group-item long-value">
+									&nbsp;&nbsp;&nbsp;&nbsp;<strong
+										>Available Orders</strong
+									>
+								</span>
+								<a href="#" class="list-group-item long-value"
+									>&nbsp;&nbsp;&nbsp;&nbsp;My Orders</a
+								>
+								<span class="list-group-divider"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-9">
+					<h1 class="a_title">Available Orders</h1>
+					<div class="table-responsive">
+						<div class="dataTables_wrapper no-footer">
+							<div class="row">
+								<div class="col-sm-5">
+									<div class="dataTables_filter">
+										<form
+											action="/sStore/shipper-available-orders"
+											method="get"
+											id="form-search"
+										>
+											<input
+												type="number"
+												name="pageNum"
+												th:value="${currentPage}"
+												hidden
+											/>
+											<input
+												type="number"
+												name="sort"
+												th:value="${sort}"
+												hidden
+											/>
+											<label>
+												<input
+													type="search"
+													name="search"
+													class="form-control"
+													placeholder="Filter by user name or phone number"
+												/>
+												<i
+													class="bx bx-loader-circle bx-spin"
+												></i>
+											</label>
+										</form>
+									</div>
+								</div>
+								<div class="col-sm-7">
+									<div
+										class="dataTables_paginate paging_simple_number"
+									>
+										<a
+											th:class="${currentPage &gt; 1 ? 'paginate_button previous' : 'paginate_button previous disabled'}"
+											href="#"
+											>Previous</a
+										>
+										<span th:if="${totalPages &gt; 0}">
+											<a
+												th:each="i: ${#numbers.sequence(1, totalPages)}"
+												th:class="${currentPage == i ? 'paginate_button current' : 'paginate_button'}"
+												href="#"
+												th:text="${i}"
+												>1</a
+											>
+										</span>
+										<a
+											th:class="${currentPage &lt; totalPages ? 'paginate_button next' : 'paginate_button next disable'}"
+											href="#"
+											>Next</a
+										>
+									</div>
+								</div>
+							</div>
+							<div>
+								<table>
+									<thead>
+										<tr>
+											<th class="sorting active">
+												<i class="bx bxs-sort-alt"></i
+												>Date
+											</th>
+											<th>Contact</th>
+											<th class="sorting active">
+												<i class="bx bxs-sort-alt"></i>
+												Total Price
+											</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr
+											th:each="order : ${orders}"
+											class="orders1"
+										>
+											<td>
+												<small
+													th:text="${order.createAt}"
+													>18 06, 2001</small
+												>
+											</td>
+											<td
+												class="td-word-wrap phone-with-xs"
+											>
+												<div
+													th:text="${order.user.userName}"
+												>
+													Nguyen Thanh Sang
+												</div>
+												<div>
+													<small
+														th:text="${order.user.phoneNumber}"
+														>0777908037</small
+													>
+												</div>
+											</td>
+											<td>
+												<span
+													th:text="${order.totalPrice}"
+													>$0.00</span
+												>
+											</td>
+											<td>
+												<a href="#">Take</a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Modal -->
+		<div
+			th:fragment="orderDetailModal"
+			class="modal fade"
+			id="order-detail-modal"
+			tabindex="-1"
+			aria-labelledby="order-detail-modal"
+			aria-hidden="true"
+		>
+			<div class="modal-dialog modal-xl">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Order Details</h5>
+						<button
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"
+						></button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-sm-4">
+								<div class="panel">
+									<div class="panel-heading">General</div>
+									<div class="panel-body">
+										<div class="row">
+											<div class="col-sm-4 control-label">
+												<span>Date</span>
+											</div>
+											<div class="col-sm-8 control-field">
+												18 06, 2001
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-sm-4 control-label">
+												<span>Total</span>
+											</div>
+											<div class="col-sm-8 control-field">
+												$0.00
+											</div>
+										</div>
+										<div class="catalog">Contact</div>
+										<div class="row">
+											<div class="col-sm-4 control-label">
+												<span>Name</span>
+											</div>
+											<div class="col-sm-8 control-field">
+												Nguyen Thanh Sang
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-sm-4 control-label">
+												<span>Phone</span>
+											</div>
+											<div class="col-sm-8 control-field">
+												0777908037
+											</div>
+										</div>
+										<div class="catalog">Address</div>
+										<div class="row">
+											<div class="col-sm-4 control-label">
+												<span>Province</span>
+											</div>
+											<div class="col-sm-8 control-field">
+												Quảng Nam
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-sm-4 control-label">
+												<span>District</span>
+											</div>
+											<div class="col-sm-8 control-field">
+												Dien ban
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-sm-4 control-label">
+												<span>Ward</span>
+											</div>
+											<div class="col-sm-8 control-field">
+												Dien An
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-sm-4 control-label">
+												<span>Address</span>
+											</div>
+											<div class="col-sm-8 control-field">
+												Phong Nhi
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-8">
+								<div class="panel panel-default">
+									<div class="panel-heading">Items</div>
+									<div class="panel-body">
+										<table>
+											<thead>
+												<tr>
+													<td>Item</td>
+													<td>Item Price</td>
+													<td>Qty</td>
+													<td>Ext. Price</td>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>Product name</td>
+													<td>$0.00</td>
+													<td>1</td>
+													<td>$0.00</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" data-bs-dismiss="modal">
+							Close
+						</button>
+						<button type="button" id="take-order">
+							Take Order
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<!-- BootStrap JS -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="../static/js/shipper.js"></script>
+</html>

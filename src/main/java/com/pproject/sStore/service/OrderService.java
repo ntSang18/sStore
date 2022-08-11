@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.pproject.sStore.model.Order;
@@ -26,6 +30,8 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final ProductItemRepository productItemRepository;
 
+    private static final Integer PAGE_SIZE = 8;
+
     @Autowired
     public OrderService(
             CartRepository cartRepository,
@@ -46,6 +52,34 @@ public class OrderService {
 
     public List<Order> getAdminOrders() {
         return orderRepository.getAdminOrders();
+    }
+
+    public Page<Order> getShipOrders1(int pageNum, String search, int sort) {
+        if (sort == 1) {
+            return orderRepository.getShipperOrders1(search, PageRequest.of(
+                    pageNum - 1,
+                    PAGE_SIZE,
+                    Sort.by("createAt").descending()));
+        } else if (sort == 2) {
+            return orderRepository.getShipperOrders1(search, PageRequest.of(
+                    pageNum - 1,
+                    PAGE_SIZE,
+                    Sort.by("createAt").ascending()));
+        } else if (sort == 3) {
+            return orderRepository.getShipperOrders1(search, PageRequest.of(
+                    pageNum - 1,
+                    PAGE_SIZE,
+                    Sort.by("totalPrice").descending()));
+        } else if (sort  == 4) {
+            return orderRepository.getShipperOrders1(search, PageRequest.of(
+                    pageNum - 1,
+                    PAGE_SIZE,
+                    Sort.by("createAt").ascending()));
+        } else {
+            return orderRepository.getShipperOrders1(search, PageRequest.of(
+                    pageNum - 1,
+                    PAGE_SIZE));
+        }
     }
 
     public List<Order> getUserOrders(Long uid) {

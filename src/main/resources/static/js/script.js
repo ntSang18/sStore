@@ -99,18 +99,6 @@ $(document).ready(function () {
 		});
 	});
 
-	$(".show-hide-pass a").on("click", function (event) {
-		event.preventDefault();
-		if ($(".show-hide-pass input").attr("type") == "text") {
-			$(".show-hide-pass input").attr("type", "password");
-			$(".show-hide-pass i").addClass("bx-hide");
-			$(".show-hide-pass i").removeClass("bx-show");
-		} else if ($(".show-hide-pass input").attr("type") == "password") {
-			$(".show-hide-pass input").attr("type", "text");
-			$(".show-hide-pass i").addClass("bx-show");
-			$(".show-hide-pass i").removeClass("bx-hide");
-		}
-	});
 	// ------------------------------Shop------------------------------- //
 	$("#form-filter input[name='search']").keypress(function (event) {
 		if (event.which === 13) {
@@ -216,6 +204,19 @@ $(document).ready(function () {
 	});
 
 	//-----------------------------Account-------------------------------//
+	$(".show-hide-pass a").on("click", function (event) {
+		event.preventDefault();
+		if ($(".show-hide-pass input").attr("type") == "text") {
+			$(".show-hide-pass input").attr("type", "password");
+			$(".show-hide-pass i").addClass("bx-hide");
+			$(".show-hide-pass i").removeClass("bx-show");
+		} else if ($(".show-hide-pass input").attr("type") == "password") {
+			$(".show-hide-pass input").attr("type", "text");
+			$(".show-hide-pass i").addClass("bx-show");
+			$(".show-hide-pass i").removeClass("bx-hide");
+		}
+	});
+
 	$("#btn-edit-save").click(function (event) {
 		event.preventDefault();
 		if ($(this).attr("class") == "edit") {
@@ -301,7 +302,7 @@ $(document).ready(function () {
 			let items = "";
 			for (let i = 0; i < order.items.length; i++) {
 				// Product already review
-				if (order.items[i].status == 4) {
+				if (order.items[i].status == 5) {
 					items += `<div class="order-item" data-id="${
 						order.items[i].product.id
 					}">

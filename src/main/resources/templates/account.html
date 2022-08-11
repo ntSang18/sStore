@@ -195,10 +195,10 @@
 						<td th:if="${order.status == 1}">
 							<span class="status pending"> Pending </span>
 						</td>
-						<td th:if="${order.status == 2}">
+						<td th:if="${order.status == 2 || order.status == 3}">
 							<span class="status process"> Process </span>
 						</td>
-						<td th:if="${order.status == 3}">
+						<td th:if="${order.status == 4}">
 							<span class="status completed"> Completed </span>
 						</td>
 					</tr>

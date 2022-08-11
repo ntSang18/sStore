@@ -330,7 +330,7 @@ public class Controler {
 		return userService.getUserById(id);
 	}
 
-	@PostMapping("/admin-new-account")
+	@PostMapping(value = "/admin-new-account")
 	public String newAccount(User user, Address address, Model model) {
 		try {
 			User u = userService.register(user, address);
@@ -340,6 +340,23 @@ public class Controler {
 			model.addAttribute("message", e.getMessage());
 			return "404";
 		}
+	}
+
+	@GetMapping(value = "/shipper-available-orders")
+	public String shipperOrders1(@RequestParam(name = "pageNum") Optional<Integer> pageNum,
+								 @RequestParam(name = "search") Optional<String> search,
+								 @RequestParam(name = "sort") Optional<Integer> sort,
+								 Model model) {
+		Page<Order> page = orderService.getShipOrders1(
+				pageNum.orElse(1),
+				search.orElse(""),
+				sort.orElse(0));
+		model.addAttribute("totalPages", page.getTotalPages());
+		model.addAttribute("currentPage", 1);
+		model.addAttribute("search", search);
+		model.addAttribute("sort", sort);
+		model.addAttribute("orders", page.getContent());
+		return "shipper_orders1";
 	}
 
 }
