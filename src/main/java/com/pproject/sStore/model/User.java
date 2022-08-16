@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity(name = "User")
 @Table(name = "users")
 public class User {
@@ -35,6 +37,9 @@ public class User {
 	@Column(nullable = false, columnDefinition = "TEXT")
 	private String phoneNumber;
 
+	// type = 1: client
+	// type = 2: admin
+	// type = 3: shipper
 	@Column(nullable = false)
 	private int type;
 
@@ -46,9 +51,11 @@ public class User {
 	@JoinColumn(name = "cart_id", referencedColumnName = "id")
 	private Cart cart;
 
+	@JsonBackReference
 	@OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Order> orders = new ArrayList<>();
 
+	@JsonBackReference
 	@OneToMany(mappedBy = "shipper", cascade = CascadeType.ALL)
 	private List<Order> shipperOrders = new ArrayList<>();
 

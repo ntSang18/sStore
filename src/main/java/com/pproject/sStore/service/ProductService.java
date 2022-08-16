@@ -122,12 +122,12 @@ public class ProductService {
 		return products;
 	}
 
-	public List<Product> getFeaturedProducts() {
+	public List<Product> getFeaturedProducts(int size) {
 		List<Product> featuredProducts = getAllProduct();
 		featuredProducts.sort((Product p1, Product p2) -> {
 			return p1.getSold().compareTo(p2.getSold());
 		});
-		return featuredProducts.subList(0, 8);
+		return featuredProducts.subList(0, size);
 	}
 
 	public List<Product> getNewProducts() {
@@ -252,7 +252,7 @@ public class ProductService {
 			ProductItem productItem = productItemRepository.findById(piid)
 					.orElseThrow(() -> new IllegalStateException("Product Item doest not exit"));
 			Product product = productItem.getProduct();
-			productItem.setStatus(4);
+			productItem.setStatus(5);
 			review.setProduct(product);
 			review.setUser(user);
 			productItemRepository.save(productItem);

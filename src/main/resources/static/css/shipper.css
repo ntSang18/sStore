@@ -15,6 +15,7 @@ div {
 
 a {
     text-decoration: none;
+    cursor: pointer;
 }
 
 h1 {
@@ -278,14 +279,24 @@ tbody tr:hover td{
 
 tbody tr a {
     padding: 4px 8px;
-    background-color: #428bca;
     color: #fff;
     border: 1px solid;
     transition: 0.3s ease;
 }
 
-tbody tr a:hover {
+tbody tr a.take {
+    background-color: #428bca;
+}
+tbody tr a.delivered {
+    background-color: #9EB23B;
+}
+
+tbody tr a.take:hover {
     background-color: #24649c;
+    color: #fff;
+}
+tbody tr a.delivered:hover {
+    background-color: #7e8f2a;
     color: #fff;
 }
 
@@ -405,16 +416,30 @@ small{
     background-color: #6c757d;
 }
 
-.modal-footer button:last-child {
+.modal-footer button:nth-child(2),
+button.btn1 {
     background-color: #428bca;
+}
+
+.modal-footer button:last-child {
+    background-color: #9EB23B;
 }
 
 .modal-footer button:first-child:hover {
     background-color: #545a5f;
 }
 
-.modal-footer button:last-child:hover {
+.modal-footer button:nth-child(2):hover,
+button.btn1:hover {
     background-color: #24649c;
+}
+
+.modal-footer button:last-child:hover {
+    background-color: #7e8f2a;
+}
+
+.modal-footer button.hide {
+    display: none;
 }
 
 #change-address-modal .row,

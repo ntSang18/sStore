@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- jQuery -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<!-- BootStrap CSS-->
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+		/>
+		<!-- BoxIcons -->
+		<link
+			href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+			rel="stylesheet"
+		/>
+		<!-- Autonumeric -->
+		<script src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"></script>
+		<!-- Sweetalert -->
+		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<!-- style -->
+		<link rel="stylesheet" href="../static/css/style.css" />
+		<title>sStore | Cart</title>
+	</head>
+	<body>
+		<section th:replace="index :: navbar"></section>
+
+		<section
+			id="page-header"
+			class="orders-header"
+			th:fragment="account-header"
+		>
+			<h2>#account</h2>
+			<p>Manager your Information and history Orders</p>
+		</section>
+
+		<section id="orders">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="column col-sm-3" style="padding-right: 50px">
+						<div class="row">
+							<div class="column col-sm-12">
+								<div class="list-group">
+									<a
+										th:href="@{/sStore/account}"
+										class="list-group-item"
+										>Nguyen Thanh Sang</a
+									>
+									<span class="list-group-item">
+										&nbsp;&nbsp;&nbsp;&nbsp;<strong
+											>My Orders</strong
+										>
+									</span>
+									<span class="list-group-divider"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="column col-sm-9 info">
+						<h1>Your Orders</h1>
+						<p>Manager your orders.</p>
+						<table width="100%">
+							<thead>
+								<tr>
+									<td>Remove</td>
+									<td>Date Order</td>
+									<td>Total Quantity</td>
+									<td>Total Price</td>
+									<td>Status</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr
+									th:each="order : ${orders}"
+									class="order"
+									th:data-id="${order.id}"
+								>
+									<td>
+										<a class="del-cart-item" href="#"
+											><i class="bx bx-x-circle"></i
+										></a>
+									</td>
+									<td th:text="${order.createAt}"></td>
+									<td th:text="${order.totalQuantity}"></td>
+									<td
+										class="price"
+										th:text="${order.totalPrice}"
+									>
+										$118.19
+									</td>
+									<td th:if="${order.status == 1}">
+										<span class="status pending">
+											Pending
+										</span>
+									</td>
+									<td
+										th:if="${order.status == 2 || order.status == 3}"
+									>
+										<span class="status process">
+											Process
+										</span>
+									</td>
+									<td th:if="${order.status == 4}">
+										<span class="status completed">
+											Completed
+										</span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<footer th:replace="index :: footer"></footer>
+
+		<!-- View Order Modal -->
+		<div
+			class="modal fade"
+			id="orders-view-order"
+			tabindex="-1"
+			aria-labelledby="orders-view-order"
+			aria-hidden="true"
+		>
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content p-3 view-order">
+					<div class="order-title">
+						Order Details
+						<span id="total-quantity">(5 products)</span>
+					</div>
+					<div class="order-items-list"></div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Review Order Modal -->
+		<div
+			class="modal fade"
+			id="review-order-modal"
+			tabindex="-1"
+			aria-labelledby="review-order-modal"
+			aria-hidden="true"
+		>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">
+							Rating Product
+						</h5>
+					</div>
+					<div class="modal-body">
+						<div class="star-widget">
+							<input
+								type="radio"
+								name="rate"
+								id="rate-5"
+								value="5"
+							/>
+							<label for="rate-5" class="bx bxs-star"></label>
+							<input
+								type="radio"
+								name="rate"
+								id="rate-4"
+								value="4"
+							/>
+							<label for="rate-4" class="bx bxs-star"></label>
+							<input
+								type="radio"
+								name="rate"
+								id="rate-3"
+								value="3"
+							/>
+							<label for="rate-3" class="bx bxs-star"></label>
+							<input
+								type="radio"
+								name="rate"
+								id="rate-2"
+								value="2"
+							/>
+							<label for="rate-2" class="bx bxs-star"></label>
+							<input
+								type="radio"
+								name="rate"
+								id="rate-1"
+								value="1"
+							/>
+							<label for="rate-1" class="bx bxs-star"></label>
+						</div>
+						<form action="#">
+							<header id="header-review">&nbsp;</header>
+							<div class="textarea">
+								<textarea
+									name="review"
+									cols="40"
+									placeholder="Describer your experience..."
+								></textarea>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="post">Post</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<!-- script -->
+	<script src="../static/js/script.js"></script>
+	<!-- BootStrap JS -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		const links = document.querySelectorAll("#navbar li a");
+		links.forEach((item) => {
+			item.classList.remove("active");
+		});
+		links[5].classList.add("active");
+	</script>
+</html>

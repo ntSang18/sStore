@@ -204,91 +204,182 @@ $(document).ready(function () {
 	});
 
 	//-----------------------------Account-------------------------------//
-	$(".show-hide-pass a").on("click", function (event) {
+
+	$("#change-address").click(function (event) {
 		event.preventDefault();
-		if ($(".show-hide-pass input").attr("type") == "text") {
-			$(".show-hide-pass input").attr("type", "password");
-			$(".show-hide-pass i").addClass("bx-hide");
-			$(".show-hide-pass i").removeClass("bx-show");
-		} else if ($(".show-hide-pass input").attr("type") == "password") {
-			$(".show-hide-pass input").attr("type", "text");
-			$(".show-hide-pass i").addClass("bx-show");
-			$(".show-hide-pass i").removeClass("bx-hide");
+		$("#change-address-modal").modal("show");
+	});
+
+	$("#vision1").on("click", function (event) {
+		if ($("#current-password").attr("type") == "text") {
+			$("#current-password").attr("type", "password");
+			$(this).addClass("bx-hide");
+			$(this).removeClass("bx-show");
+		} else if ($("#current-password").attr("type") == "password") {
+			$("#current-password").attr("type", "text");
+			$(this).addClass("bx-show");
+			$(this).removeClass("bx-hide");
 		}
 	});
 
-	$("#btn-edit-save").click(function (event) {
-		event.preventDefault();
-		if ($(this).attr("class") == "edit") {
-			$(this).removeClass("edit");
-			$(this).addClass("save");
-			$(this).html("Save Information");
-			$("#form-user-info").prop("disabled", false);
-		} else if ($(this).attr("class") == "save") {
-			if (!$("#form-edit-user input[name='userName']").val()) {
-				Toast.fire({
-					icon: "warning",
-					title: "User name is empty!",
-				});
-			} else if (!$("#form-edit-user input[name='password']").val()) {
-				Toast.fire({
-					icon: "warning",
-					title: "Password is empty!",
-				});
-			} else if (!$("#form-edit-user input[name='email']").val()) {
-				Toast.fire({
-					icon: "warning",
-					title: "Email is empty!",
-				});
-			} else if (!$("#form-edit-user input[name='phoneNumber']").val()) {
-				Toast.fire({
-					icon: "warning",
-					title: "PhoneNumber is empty!",
-				});
-			} else if (!$("#form-edit-user select[name='province']").val()) {
-				Toast.fire({
-					icon: "warning",
-					title: "Province is empty!",
-				});
-			} else if (!$("#form-edit-user select[name='district']").val()) {
-				Toast.fire({
-					icon: "warning",
-					title: "District is empty!",
-				});
-			} else if (!$("#form-edit-user select[name='ward']").val()) {
-				Toast.fire({
-					icon: "warning",
-					title: "Ward is empty!",
-				});
-			} else if (
-				!$("#form-edit-user input[name='detailAddress']").val()
-			) {
-				Toast.fire({
-					icon: "warning",
-					title: "Province is empty!",
-				});
-			} else {
-				var data = $("#form-edit-user").serialize();
-				var href = "/sStore/edit-user";
-				$.post(href, data, function (message, status) {
-					if (status == "success") {
-						Toast.fire({
-							icon: "success",
-							title: message,
-						});
-					} else {
-						Toast.fire({
-							icon: "error",
-							title: message,
-						});
-					}
-				});
-				$(this).removeClass("save");
-				$(this).addClass("edit");
-				$(this).html("Edit Information");
-				$("#form-user-info").prop("disabled", true);
-			}
+	$("#vision2").on("click", function (event) {
+		if ($("#new-password").attr("type") == "text") {
+			$("#new-password").attr("type", "password");
+			$(this).addClass("bx-hide");
+			$(this).removeClass("bx-show");
+		} else if ($("#new-password").attr("type") == "password") {
+			$("#new-password").attr("type", "text");
+			$(this).addClass("bx-show");
+			$(this).removeClass("bx-hide");
 		}
+	});
+
+	$("#vision3").on("click", function (event) {
+		if ($("#repeat-password").attr("type") == "text") {
+			$("#repeat-password").attr("type", "password");
+			$(this).addClass("bx-hide");
+			$(this).removeClass("bx-show");
+		} else if ($("#repeat-password").attr("type") == "password") {
+			$("#repeat-password").attr("type", "text");
+			$(this).addClass("bx-show");
+			$(this).removeClass("bx-hide");
+		}
+	});
+
+	$("#change-email").click(function () {
+		if ($("#email").prop("disabled")) {
+			$("#email").prop("disabled", false);
+			$(this).addClass("bx-check-square");
+			$(this).removeClass("bx-edit");
+		} else {
+			var email = $("#email").val();
+			var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+			if (email.trim() == "" || emailReg.test(email) == false) {
+				Toast.fire({
+					icon: "warning",
+					title: "Invalid email!",
+				});
+				return;
+			}
+			var href = "/sStore/change-email";
+			var data = {
+				type: 1,
+				email: email,
+			};
+			$.post(href, data)
+				.done(function (data) {
+					Toast.fire({
+						icon: "success",
+						title: data.message,
+					});
+					$("#email").val(data.email);
+					$("#email").prop("disabled", true);
+					$("#change-email").removeClass("bx-check-square");
+					$("#change-email").addClass("bx-edit");
+				})
+				.fail(function () {
+					Toast.fire({
+						icon: "error",
+						title: "Email taken!",
+					});
+				});
+		}
+	});
+
+	$("#change-phone").click(function () {
+		if ($("#phoneNumber").prop("disabled")) {
+			$("#phoneNumber").prop("disabled", false);
+			$(this).addClass("bx-check-square");
+			$(this).removeClass("bx-edit");
+		} else {
+			var phone = $("#phoneNumber").val();
+			var phoneReg =
+				/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+			if (phone.trim() == "" || phoneReg.test(phone) == false) {
+				Toast.fire({
+					icon: "warning",
+					title: "Invalid phone number!",
+				});
+				return;
+			}
+			var href = "/sStore/change-phone";
+			var data = {
+				type: 1,
+				phone: phone,
+			};
+			$.post(href, data)
+				.done(function (data) {
+					Toast.fire({
+						icon: "success",
+						title: data.message,
+					});
+					$("#phoneNumber").val(data.phone);
+					$("#phoneNumber").prop("disabled", true);
+					$("#change-phone").removeClass("bx-check-square");
+					$("#change-phone").addClass("bx-edit");
+				})
+				.fail(function () {
+					Toast.fire({
+						icon: "error",
+						title: "Phone number taken!",
+					});
+				});
+		}
+	});
+
+	$("#form-address").submit(function (event) {
+		event.preventDefault();
+		$.post($(this).attr("action"), $(this).serialize())
+			.done(function (data) {
+				$("#change-address-modal").modal("hide");
+				$("#display-province").html(data.address.province);
+				$("#display-district").html(data.address.district);
+				$("#display-ward").html(data.address.ward);
+				$("#display-detailAddress").html(data.address.detailAddress);
+				Toast.fire({
+					icon: "success",
+					title: data.message,
+				});
+			})
+			.fail(function () {
+				Toast.fire({
+					icon: "error",
+					title: "Error",
+				});
+			});
+	});
+
+	$("#save-change-pass").click(function () {
+		var currentPass = $("#current-password").val();
+		var newPass = $("#new-password").val();
+		var repeatPass = $("#repeat-password").val();
+		var href = "/sStore/change-password";
+		if (!(newPass === repeatPass)) {
+			Toast.fire({
+				icon: "warning",
+				title: "Repeat password does not match the new password",
+			});
+			return;
+		}
+		var data = {
+			type: 1,
+			currentPass: currentPass,
+			newPass: newPass,
+		};
+		$.post(href, data)
+			.done(function (data) {
+				$("#change-password-modal").modal("hide");
+				Toast.fire({
+					icon: "success",
+					title: data.message,
+				});
+			})
+			.fail(function () {
+				Toast.fire({
+					icon: "error",
+					title: "Invalid current password!",
+				});
+			});
 	});
 
 	$(".order").click(function (event) {
@@ -302,7 +393,7 @@ $(document).ready(function () {
 			let items = "";
 			for (let i = 0; i < order.items.length; i++) {
 				// Product already review
-				if (order.items[i].status == 5) {
+				if (order.items[i].status == 5 || order.items[i].status < 4) {
 					items += `<div class="order-item" data-id="${
 						order.items[i].product.id
 					}">

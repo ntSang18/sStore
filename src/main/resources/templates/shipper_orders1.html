@@ -30,7 +30,9 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="list-group">
-								<a href="#" class="list-group-item"
+								<a
+									th:href="@{/sStore/shipper-account}"
+									class="list-group-item"
 									>Nguyen Thanh Sang</a
 								>
 								<span class="list-group-item long-value">
@@ -38,7 +40,9 @@
 										>Available Orders</strong
 									>
 								</span>
-								<a href="#" class="list-group-item long-value"
+								<a
+									th:href="@{/sStore/shipper-my-orders}"
+									class="list-group-item long-value"
 									>&nbsp;&nbsp;&nbsp;&nbsp;My Orders</a
 								>
 								<span class="list-group-divider"></span>
@@ -56,7 +60,7 @@
 										<form
 											action="/sStore/shipper-available-orders"
 											method="get"
-											id="form-search"
+											id="form-search-1"
 										>
 											<input
 												type="number"
@@ -76,6 +80,7 @@
 													name="search"
 													class="form-control"
 													placeholder="Filter by user name or phone number"
+													th:value="${search}"
 												/>
 												<i
 													class="bx bx-loader-circle bx-spin"
@@ -86,25 +91,26 @@
 								</div>
 								<div class="col-sm-7">
 									<div
+										th:if="${totalPages &gt; 0}"
 										class="dataTables_paginate paging_simple_number"
 									>
 										<a
 											th:class="${currentPage &gt; 1 ? 'paginate_button previous' : 'paginate_button previous disabled'}"
-											href="#"
+											th:href="@{/sStore/shipper-available-orders(numPage=${currentPage - 1}, search=${search}, sort=${sort})}"
 											>Previous</a
 										>
-										<span th:if="${totalPages &gt; 0}">
+										<span>
 											<a
 												th:each="i: ${#numbers.sequence(1, totalPages)}"
 												th:class="${currentPage == i ? 'paginate_button current' : 'paginate_button'}"
-												href="#"
+												th:href="@{/sStore/shipper-available-orders(pageNum=${i}, search=${search}, sort=${sort})}"
 												th:text="${i}"
 												>1</a
 											>
 										</span>
 										<a
-											th:class="${currentPage &lt; totalPages ? 'paginate_button next' : 'paginate_button next disable'}"
-											href="#"
+											th:class="${currentPage &lt; totalPages ? 'paginate_button next' : 'paginate_button next disabled'}"
+											th:href="@{/sStore/shipper-available-orders(pageNum=${currentPage + 1}, search=${search}, sort=${sort})}"
 											>Next</a
 										>
 									</div>
@@ -114,13 +120,53 @@
 								<table>
 									<thead>
 										<tr>
-											<th class="sorting active">
-												<i class="bx bxs-sort-alt"></i
-												>Date
+											<th
+												th:class="${sort == 1 or sort == 2} ? 'sorting active' : 'sorting'"
+												th:data-sort="${sort}"
+												id="sort-date-1"
+											>
+												<th:block th:if="${sort == 1}">
+													<i
+														class="bx bxs-down-arrow"
+													></i>
+												</th:block>
+												<th:block th:if="${sort == 2}">
+													<i
+														class="bx bxs-up-arrow"
+													></i>
+												</th:block>
+												<th:block
+													th:if="${sort != 1 and sort != 2}"
+												>
+													<i
+														class="bx bxs-sort-alt"
+													></i>
+												</th:block>
+												Date
 											</th>
 											<th>Contact</th>
-											<th class="sorting active">
-												<i class="bx bxs-sort-alt"></i>
+											<th
+												th:class="${sort == 3 or sort == 4} ? 'sorting active' : 'sorting'"
+												th:data-sort="${sort}"
+												id="sort-price-1"
+											>
+												<th:block th:if="${sort == 3}">
+													<i
+														class="bx bxs-down-arrow"
+													></i>
+												</th:block>
+												<th:block th:if="${sort == 4}">
+													<i
+														class="bx bxs-up-arrow"
+													></i>
+												</th:block>
+												<th:block
+													th:if="${sort != 3 and sort != 4}"
+												>
+													<i
+														class="bx bxs-sort-alt"
+													></i>
+												</th:block>
 												Total Price
 											</th>
 											<th>Action</th>
@@ -129,7 +175,9 @@
 									<tbody>
 										<tr
 											th:each="order : ${orders}"
-											class="orders1"
+											class="view-order"
+											th:data-id="${order.id}"
+											data-mode="1"
 										>
 											<td>
 												<small
@@ -155,11 +203,16 @@
 											<td>
 												<span
 													th:text="${order.totalPrice}"
+													class="price"
 													>$0.00</span
 												>
 											</td>
 											<td>
-												<a href="#">Take</a>
+												<a
+													class="take"
+													th:href="@{/sStore/shipper-take-order(id=${order.id})}"
+													>Take</a
+												>
 											</td>
 										</tr>
 									</tbody>
@@ -201,7 +254,10 @@
 											<div class="col-sm-4 control-label">
 												<span>Date</span>
 											</div>
-											<div class="col-sm-8 control-field">
+											<div
+												id="order-detail-createAt"
+												class="col-sm-8 control-field"
+											>
 												18 06, 2001
 											</div>
 										</div>
@@ -209,7 +265,10 @@
 											<div class="col-sm-4 control-label">
 												<span>Total</span>
 											</div>
-											<div class="col-sm-8 control-field">
+											<div
+												id="order-detail-totalPrice"
+												class="col-sm-8 control-field price"
+											>
 												$0.00
 											</div>
 										</div>
@@ -218,7 +277,10 @@
 											<div class="col-sm-4 control-label">
 												<span>Name</span>
 											</div>
-											<div class="col-sm-8 control-field">
+											<div
+												id="order-detail-userName"
+												class="col-sm-8 control-field"
+											>
 												Nguyen Thanh Sang
 											</div>
 										</div>
@@ -226,7 +288,10 @@
 											<div class="col-sm-4 control-label">
 												<span>Phone</span>
 											</div>
-											<div class="col-sm-8 control-field">
+											<div
+												id="order-detail-phoneNumber"
+												class="col-sm-8 control-field"
+											>
 												0777908037
 											</div>
 										</div>
@@ -235,7 +300,10 @@
 											<div class="col-sm-4 control-label">
 												<span>Province</span>
 											</div>
-											<div class="col-sm-8 control-field">
+											<div
+												id="order-detail-province"
+												class="col-sm-8 control-field"
+											>
 												Quảng Nam
 											</div>
 										</div>
@@ -243,7 +311,10 @@
 											<div class="col-sm-4 control-label">
 												<span>District</span>
 											</div>
-											<div class="col-sm-8 control-field">
+											<div
+												id="order-detail-district"
+												class="col-sm-8 control-field"
+											>
 												Dien ban
 											</div>
 										</div>
@@ -251,7 +322,10 @@
 											<div class="col-sm-4 control-label">
 												<span>Ward</span>
 											</div>
-											<div class="col-sm-8 control-field">
+											<div
+												id="order-detail-ward"
+												class="col-sm-8 control-field"
+											>
 												Dien An
 											</div>
 										</div>
@@ -259,7 +333,10 @@
 											<div class="col-sm-4 control-label">
 												<span>Address</span>
 											</div>
-											<div class="col-sm-8 control-field">
+											<div
+												id="order-detail-detailAddress"
+												class="col-sm-8 control-field"
+											>
 												Phong Nhi
 											</div>
 										</div>
@@ -279,14 +356,9 @@
 													<td>Ext. Price</td>
 												</tr>
 											</thead>
-											<tbody>
-												<tr>
-													<td>Product name</td>
-													<td>$0.00</td>
-													<td>1</td>
-													<td>$0.00</td>
-												</tr>
-											</tbody>
+											<tbody
+												id="order-detail-items"
+											></tbody>
 										</table>
 									</div>
 								</div>
@@ -299,6 +371,9 @@
 						</button>
 						<button type="button" id="take-order">
 							Take Order
+						</button>
+						<button type="button" id="delivered-order">
+							Delivered
 						</button>
 					</div>
 				</div>

@@ -245,11 +245,18 @@
 			<h2>Featured Products</h2>
 			<p>Summer Collection New Modern Design</p>
 			<div class="pro-container">
-				<div class="pro">
-					<img src="../static/image/products/n1.jpg" alt="" />
+				<div
+					th:each="product : ${products}"
+					class="pro"
+					th:id="${product.id}"
+					onclick="sproduct(this)"
+				>
+					<img th:src="@{${product.getMainImage}}" />
 					<div class="des">
-						<span>adidas</span>
-						<h5>Cartoon Astronaut T-shirts</h5>
+						<span th:text="${product.branch}">adidas</span>
+						<h5 th:text="${product.productName}">
+							Cartoon Astronaut T-shirts
+						</h5>
 						<div class="star">
 							<i class="bx bxs-star"></i>
 							<i class="bx bxs-star"></i>
@@ -257,55 +264,7 @@
 							<i class="bx bxs-star"></i>
 							<i class="bx bxs-star"></i>
 						</div>
-						<h4>$78</h4>
-					</div>
-					<a href="#"><i class="bx bx-cart cart"></i></a>
-				</div>
-				<div class="pro">
-					<img src="../static/image/products/n2.jpg" alt="" />
-					<div class="des">
-						<span>adidas</span>
-						<h5>Cartoon Astronaut T-shirts</h5>
-						<div class="star">
-							<i class="bx bxs-star"></i>
-							<i class="bx bxs-star"></i>
-							<i class="bx bxs-star"></i>
-							<i class="bx bxs-star"></i>
-							<i class="bx bxs-star"></i>
-						</div>
-						<h4>$78</h4>
-					</div>
-					<a href="#"><i class="bx bx-cart cart"></i></a>
-				</div>
-				<div class="pro">
-					<img src="../static/image/products/n3.jpg" alt="" />
-					<div class="des">
-						<span>adidas</span>
-						<h5>Cartoon Astronaut T-shirts</h5>
-						<div class="star">
-							<i class="bx bxs-star"></i>
-							<i class="bx bxs-star"></i>
-							<i class="bx bxs-star"></i>
-							<i class="bx bxs-star"></i>
-							<i class="bx bxs-star"></i>
-						</div>
-						<h4>$78</h4>
-					</div>
-					<a href="#"><i class="bx bx-cart cart"></i></a>
-				</div>
-				<div class="pro">
-					<img src="../static/image/products/n4.jpg" alt="" />
-					<div class="des">
-						<span>adidas</span>
-						<h5>Cartoon Astronaut T-shirts</h5>
-						<div class="star">
-							<i class="bx bxs-star"></i>
-							<i class="bx bxs-star"></i>
-							<i class="bx bxs-star"></i>
-							<i class="bx bxs-star"></i>
-							<i class="bx bxs-star"></i>
-						</div>
-						<h4>$78</h4>
+						<h4 class="price" th:text="${product.price}">$78</h4>
 					</div>
 					<a href="#"><i class="bx bx-cart cart"></i></a>
 				</div>

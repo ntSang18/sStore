@@ -30,10 +30,14 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="list-group">
-								<a href="#" class="list-group-item"
+								<a
+									th:href="@{/sStore/shipper-account}"
+									class="list-group-item"
 									>Nguyen Thanh Sang</a
 								>
-								<a href="#" class="list-group-item long-value"
+								<a
+									th:href="@{/sStore/shipper-available-orders}"
+									class="list-group-item long-value"
 									>&nbsp;&nbsp;&nbsp;&nbsp;Available Orders</a
 								>
 								<span class="list-group-item long-value">
@@ -53,37 +57,60 @@
 							<div class="row">
 								<div class="col-sm-5">
 									<div class="dataTables_filter">
-										<label>
+										<form
+											action="/sStore/shipper-my-orders"
+											method="get"
+											id="form-search-2"
+										>
 											<input
-												type="search"
-												class="form-control"
-												placeholder="Filter by email, phone number"
+												type="number"
+												name="pageNum"
+												th:value="${currentPage}"
+												hidden
 											/>
-											<i
-												class="bx bx-loader-circle bx-spin loading"
-											></i>
-										</label>
+											<input
+												type="number"
+												name="sort"
+												th:value="${sort}"
+												hidden
+											/>
+											<label>
+												<input
+													type="search"
+													name="search"
+													class="form-control"
+													placeholder="Filter by user name or phone number"
+													th:value="${search}"
+												/>
+												<i
+													class="bx bx-loader-circle bx-spin"
+												></i>
+											</label>
+										</form>
 									</div>
 								</div>
 								<div class="col-sm-7">
 									<div
+										th:if="${totalPages &gt; 0}"
 										class="dataTables_paginate paging_simple_number"
 									>
 										<a
-											class="paginate_button previous disabled"
-											href="#"
+											th:class="${currentPage &gt; 1 ? 'paginate_button previous' : 'paginate_button previous disabled'}"
+											th:href="@{/sStore/shipper-my-orders(numPage=${currentPage - 1}, search=${search}, sort=${sort})}"
 											>Previous</a
 										>
 										<span>
 											<a
-												class="paginate_button current"
-												href="#"
+												th:each="i: ${#numbers.sequence(1, totalPages)}"
+												th:class="${currentPage == i ? 'paginate_button current' : 'paginate_button'}"
+												th:href="@{/sStore/shipper-my-orders(pageNum=${i}, search=${search}, sort=${sort})}"
+												th:text="${i}"
 												>1</a
 											>
 										</span>
 										<a
-											class="paginate_button next disabled"
-											href="#"
+											th:class="${currentPage &lt; totalPages ? 'paginate_button next' : 'paginate_button next disabled'}"
+											th:href="@{/sStore/shipper-my-orders(pageNum=${currentPage + 1}, search=${search}, sort=${sort})}"
 											>Next</a
 										>
 									</div>
@@ -93,32 +120,99 @@
 								<table>
 									<thead>
 										<tr>
-											<th class="sorting active">
-												<i class="bx bxs-sort-alt"></i
-												>Date
+											<th
+												th:class="${sort == 1 or sort == 2} ? 'sorting active' : 'sorting'"
+												th:data-sort="${sort}"
+												id="sort-date-2"
+											>
+												<th:block th:if="${sort == 1}">
+													<i
+														class="bx bxs-down-arrow"
+													></i>
+												</th:block>
+												<th:block th:if="${sort == 2}">
+													<i
+														class="bx bxs-up-arrow"
+													></i>
+												</th:block>
+												<th:block
+													th:if="${sort != 1 and sort != 2}"
+												>
+													<i
+														class="bx bxs-sort-alt"
+													></i>
+												</th:block>
+												Date
 											</th>
 											<th>Contact</th>
-											<th class="sorting active">
-												<i class="bx bxs-sort-alt"></i>
+											<th
+												th:class="${sort == 3 or sort == 4} ? 'sorting active' : 'sorting'"
+												th:data-sort="${sort}"
+												id="sort-price-2"
+											>
+												<th:block th:if="${sort == 3}">
+													<i
+														class="bx bxs-down-arrow"
+													></i>
+												</th:block>
+												<th:block th:if="${sort == 4}">
+													<i
+														class="bx bxs-up-arrow"
+													></i>
+												</th:block>
+												<th:block
+													th:if="${sort != 3 and sort != 4}"
+												>
+													<i
+														class="bx bxs-sort-alt"
+													></i>
+												</th:block>
 												Total Price
 											</th>
+											<th>Action</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr class="orders2">
+										<tr
+											th:each="order : ${orders}"
+											class="view-order"
+											th:data-id="${order.id}"
+											data-mode="2"
+										>
 											<td>
-												<small>18 06, 2001</small>
+												<smal
+													th:text="${order.createAt}"
+													>18 06, 2001</smal
+												>
 											</td>
 											<td
 												class="td-word-wrap phone-with-xs"
 											>
-												<div>Nguyen Thanh Sang</div>
+												<div
+													th:text="${order.user.userName}"
+												>
+													Nguyen Thanh Sang
+												</div>
 												<div>
-													<small>0777908037</small>
+													<small
+														th:text="${order.user.phoneNumber}"
+														>0777908037</small
+													>
 												</div>
 											</td>
 											<td>
-												<span>$0.00</span>
+												<span
+													th:text="${order.totalPrice}"
+													class="price"
+													>$0.00</span
+												>
+											</td>
+											<td>
+												<a
+													class="delivered"
+													th:href="@{/sStore/shipper-delivered-order(id=${order.id})}"
+													>Delivered</a
+												>
 											</td>
 										</tr>
 									</tbody>
@@ -130,7 +224,7 @@
 			</div>
 		</div>
 
-		<div th:replace="shipper_order1 :: orderDetailModal"></div>
+		<div th:replace="shipper_orders1 :: orderDetailModal"></div>
 	</body>
 	<!-- BootStrap JS -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>

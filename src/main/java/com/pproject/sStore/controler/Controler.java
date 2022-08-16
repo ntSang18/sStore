@@ -7,6 +7,8 @@ import com.pproject.sStore.service.ProductService;
 import com.pproject.sStore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -37,7 +40,7 @@ public class Controler {
 
 	@GetMapping
 	public String index(Model model) {
-		List<Product> featuredProducts = productService.getFeaturedProducts();
+		List<Product> featuredProducts = productService.getFeaturedProducts(8);
 		List<Product> newProducts = productService.getNewProducts();
 		model.addAttribute("featuredProducts", featuredProducts);
 		model.addAttribute("newProducts", newProducts);
@@ -74,11 +77,13 @@ public class Controler {
 		Product product = productService.getProductById(id);
 		double rating = productService.getProductRating(id);
 		Page<ProductReview> page = productService.getPageProductReview(id, pageNum.orElse(1));
+		List<Product> products = productService.getFeaturedProducts(4);
 		model.addAttribute("product", product);
 		model.addAttribute("rating", rating);
 		model.addAttribute("totalPages", page.getTotalPages());
 		model.addAttribute("currentPage", pageNum.orElse(1));
 		model.addAttribute("reviews", page.getContent());
+		model.addAttribute("products", products);
 		return "sproduct";
 	}
 
@@ -100,13 +105,34 @@ public class Controler {
 	@GetMapping(value = "/account")
 	public String account(Model model, HttpSession session) {
 		try {
-			User user = userService.getUserById(((User) session.getAttribute("USER")).getId());
-			List<Order> orders = orderService.getUserOrders(user.getId());
-			model.addAttribute("user", user);
-			model.addAttribute("orders", orders);
-			return "account";
+			User user = (User) session.getAttribute("USER");
+			if (user == null) {
+				model.addAttribute("message", "You are not logged in yet!");
+				return "404";
+			} else {
+				model.addAttribute("user", user);
+				return "account";
+			}
 		} catch (Exception e) {
-			model.addAttribute("message", "You are not login in");
+			model.addAttribute("message", e.getMessage());
+			return "404";
+		}
+	}
+
+	@GetMapping(value = "/orders")
+	public String orders(Model model, HttpSession session) {
+		try {
+			User user = (User) session.getAttribute("USER");
+			if (user == null) {
+				model.addAttribute("message", "You are not logged in yet!");
+				return "404";
+			} else {
+				List<Order> orders = orderService.getUserOrders(user.getId());
+				model.addAttribute("orders", orders);
+				return "orders";
+			}
+		} catch (Exception e) {
+			model.addAttribute("message", e.getMessage());
 			return "404";
 		}
 	}
@@ -159,8 +185,16 @@ public class Controler {
 	public String login(String email, String password, HttpSession session, Model model) {
 		try {
 			User u = userService.login(email, password);
-			session.setAttribute("USER", u);
-			return "redirect:/sStore/";
+			if (u.getType() == 1) {
+				session.setAttribute("USER", u);
+				return "redirect:/sStore/";
+			} else if (u.getType() == 2) {
+				session.setAttribute("ADMIN", u);
+				return "redirect:/sStore/admin-dashboard";
+			} else {
+				session.setAttribute("SHIPPER", u);
+				return "redirect:/sStore/shipper-available-orders";
+			}
 		} catch (Exception e) {
 			model.addAttribute("message", "Email or password incorrect");
 			return "404";
@@ -180,9 +214,126 @@ public class Controler {
 		}
 	}
 
+	@PostMapping(value = "/change-email")
+	@ResponseBody
+	public ResponseEntity<Object> changeEmail(int type, String email, HttpSession session) {
+		try {
+			User user = new User();
+			User newUser = new User();
+			if (type == 1) {
+				user = (User) session.getAttribute("USER");
+				newUser = userService.changeEmail(user, email);
+				session.setAttribute("USER", newUser);
+			} else if (type == 2) {
+				user = (User) session.getAttribute("ADMIN");
+				newUser = userService.changeEmail(user, email);
+				session.setAttribute("ADMIN", newUser);
+			} else {
+				user = (User) session.getAttribute("SHIPPER");
+				newUser = userService.changeEmail(user, email);
+				session.setAttribute("SHIPPER", newUser);
+			}
+			return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+					"email", newUser.getEmail(),
+					"message", "Your changes have been saved"));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+	}
+
+	@PostMapping(value = "/change-phone")
+	@ResponseBody
+	public ResponseEntity<Object> changePhone(int type, String phone, HttpSession session) {
+		try {
+			User user = new User();
+			User newUser = new User();
+			if (type == 1) {
+				user = (User) session.getAttribute("USER");
+				newUser = userService.changePhone(user, phone);
+				session.setAttribute("USER", newUser);
+			} else if (type == 2) {
+				user = (User) session.getAttribute("ADMIN");
+				newUser = userService.changePhone(user, phone);
+				session.setAttribute("ADMIN", newUser);
+			} else {
+				user = (User) session.getAttribute("SHIPPER");
+				newUser = userService.changePhone(user, phone);
+				session.setAttribute("SHIPPER", newUser);
+			}
+			return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+					"phone", newUser.getPhoneNumber(),
+					"message", "Your changes have been saved"));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+	}
+
+	@PostMapping(value = "/change-address")
+	@ResponseBody
+	public ResponseEntity<Object> changeAddress(int type, Address address, HttpSession session) {
+		try {
+			User user = new User();
+			User newUser = new User();
+			if (type == 1) {
+				user = (User) session.getAttribute("USER");
+				newUser = userService.changeAddress(user, address);
+				session.setAttribute("USER", newUser);
+			} else if (type == 2) {
+				user = (User) session.getAttribute("ADMIN");
+				newUser = userService.changeAddress(user, address);
+				session.setAttribute("ADMIN", newUser);
+			} else {
+				user = (User) session.getAttribute("SHIPPER");
+				newUser = userService.changeAddress(user, address);
+				session.setAttribute("SHIPPER", newUser);
+			}
+			return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+					"address", newUser.getAddress(),
+					"message", "Your Changes have been saved"));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+	}
+
+	@PostMapping(value = "/change-password")
+	@ResponseBody
+	public ResponseEntity<Object> changePassword(
+			int type,
+			String currentPass,
+			String newPass,
+			HttpSession session) {
+		try {
+			User user = new User();
+			User newUser = new User();
+			if (type == 1) {
+				user = (User) session.getAttribute("USER");
+				newUser = userService.changePassword(user, currentPass, newPass);
+				session.setAttribute("USER", newUser);
+			} else if (type == 2) {
+				user = (User) session.getAttribute("ADMIN");
+				newUser = userService.changePassword(user, currentPass, newPass);
+				session.setAttribute("ADMIN", newUser);
+			} else {
+				user = (User) session.getAttribute("SHIPPER");
+				newUser = userService.changePassword(user, currentPass, newPass);
+				session.setAttribute("SHIPPER", newUser);
+			}
+			return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+					"message", "Your changes have been saved"));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+	}
+
 	@GetMapping(value = "/logout")
-	public String logout(HttpSession session) {
-		session.removeAttribute("USER");
+	public String logout(int type, HttpSession session) {
+		if (type == 1) {
+			session.removeAttribute("USER");
+		} else if (type == 2) {
+			session.removeAttribute("ADMIN");
+		} else {
+			session.removeAttribute("SHIPPER");
+		}
 		return "redirect:/sStore/";
 	}
 
@@ -230,37 +381,87 @@ public class Controler {
 
 	/* ADMIN */
 	@GetMapping(value = "/admin-dashboard")
-	public String adminHome() {
-		return "admin_dashboard";
+	public String adminHome(Model model, HttpSession session) {
+		try {
+			User u = (User) session.getAttribute("ADMIN");
+			if (u == null) {
+				model.addAttribute("message", "You are not logged in yet!");
+				return "404";
+			} else {
+				return "admin_dashboard";
+			}
+		} catch (Exception e) {
+			model.addAttribute("message", e.getMessage());
+			return "404";
+		}
 	}
 
 	@GetMapping(value = "/admin-store")
 	public String adminStore(
 			@RequestParam(name = "search", required = false, defaultValue = "") String search,
 			@RequestParam(name = "filterMode", required = false, defaultValue = "0") Long filterMode,
-			Model model) {
-		List<Product> products = productService.getListProduct(search, filterMode);
-		model.addAttribute("products", products);
-		return "admin_store";
+			Model model,
+			HttpSession session) {
+		try {
+			User user = (User) session.getAttribute("ADMIN");
+			if (user == null) {
+				model.addAttribute("message", "You are not logged in yet!");
+				return "404";
+			} else {
+				List<Product> products = productService.getListProduct(search, filterMode);
+				model.addAttribute("products", products);
+				return "admin_store";
+			}
+		} catch (Exception e) {
+			model.addAttribute("message", e.getMessage());
+			return "404";
+		}
+
 	}
 
 	@GetMapping(value = "/admin-orders")
 	public String adminOrders(
 			@RequestParam(name = "search", required = false, defaultValue = "") String search,
 			@RequestParam(name = "filterMode", required = false, defaultValue = "0") Long filterMode,
-			Model model) {
-		List<Order> orders = orderService.getListAdminOrder(search, filterMode);
-		model.addAttribute("orders", orders);
-		return "admin_orders";
+			Model model,
+			HttpSession session) {
+		try {
+			User user = (User) session.getAttribute("ADMIN");
+			if (user == null) {
+				model.addAttribute("message", "You are not logged in yet!");
+				return "404";
+			} else {
+				List<Order> orders = orderService.getListAdminOrder(search, filterMode);
+				model.addAttribute("orders", orders);
+				return "admin_orders";
+			}
+		} catch (Exception e) {
+			model.addAttribute("message", e.getMessage());
+			return "404";
+		}
+
 	}
 
 	@GetMapping(value = "/admin-customers")
 	public String adminCustomers(
 			@RequestParam(name = "search", required = false, defaultValue = "") String search,
-			Model model) {
-		List<User> users = userService.getListUser(search);
-		model.addAttribute("users", users);
-		return "admin_customers";
+			Model model,
+			HttpSession session) {
+		try {
+			User user = (User) session.getAttribute("ADMIN");
+			if (user == null) {
+				model.addAttribute("message", "You are not logged in yet!");
+				return "404";
+			} else {
+				List<User> users = userService.getListUser(search);
+				model.addAttribute("users", users);
+				return "admin_customers";
+			}
+		} catch (Exception e) {
+			model.addAttribute("message", e.getMessage());
+			return "404";
+		}
+
 	}
 
 	@GetMapping(value = "/admin/viewProduct")
@@ -343,20 +544,105 @@ public class Controler {
 	}
 
 	@GetMapping(value = "/shipper-available-orders")
-	public String shipperOrders1(@RequestParam(name = "pageNum") Optional<Integer> pageNum,
-								 @RequestParam(name = "search") Optional<String> search,
-								 @RequestParam(name = "sort") Optional<Integer> sort,
-								 Model model) {
-		Page<Order> page = orderService.getShipOrders1(
-				pageNum.orElse(1),
-				search.orElse(""),
-				sort.orElse(0));
-		model.addAttribute("totalPages", page.getTotalPages());
-		model.addAttribute("currentPage", 1);
-		model.addAttribute("search", search);
-		model.addAttribute("sort", sort);
-		model.addAttribute("orders", page.getContent());
-		return "shipper_orders1";
+	public String shipperOrders1(
+			@RequestParam(name = "pageNum") Optional<Integer> pageNum,
+			@RequestParam(name = "search") Optional<String> search,
+			@RequestParam(name = "sort") Optional<Integer> sort,
+			Model model,
+			HttpSession session) {
+		try {
+			User shipper = (User) session.getAttribute("SHIPPER");
+			if (shipper == null) {
+				model.addAttribute("message", "You are not logged in yet!");
+				return "404";
+			} else {
+				Page<Order> page = orderService.getShipOrders1(
+						pageNum.orElse(1),
+						search.orElse(""),
+						sort.orElse(0));
+				model.addAttribute("totalPages", page.getTotalPages());
+				model.addAttribute("currentPage", pageNum.orElse(1));
+				model.addAttribute("search", search.orElse(""));
+				model.addAttribute("sort", sort.orElse(0));
+				model.addAttribute("orders", page.getContent());
+				return "shipper_orders1";
+			}
+		} catch (Exception e) {
+			model.addAttribute("EditProductMessage", e.getMessage());
+			return "404";
+		}
+	}
+
+	@GetMapping(value = "/shipper-my-orders")
+	public String shipperOrders2(
+			@RequestParam(name = "pageNum") Optional<Integer> pageNum,
+			@RequestParam(name = "search") Optional<String> search,
+			@RequestParam(name = "sort") Optional<Integer> sort,
+			Model model,
+			HttpSession session) {
+		try {
+			User shipper = (User) session.getAttribute("SHIPPER");
+			if (shipper == null) {
+				model.addAttribute("message", "You are not logged in yet!");
+				return "404";
+			} else {
+				Page<Order> page = orderService.getShipOrders2(
+						shipper.getId(),
+						pageNum.orElse(1),
+						search.orElse(""),
+						sort.orElse(0));
+				model.addAttribute("totalPages", page.getTotalPages());
+				model.addAttribute("currentPage", pageNum.orElse(1));
+				model.addAttribute("search", search.orElse(""));
+				model.addAttribute("sort", sort.orElse(0));
+				model.addAttribute("orders", page.getContent());
+				return "shipper_orders2";
+			}
+		} catch (Exception e) {
+			model.addAttribute("EditProductMessage", e.getMessage());
+			return "404";
+		}
+	}
+
+	@GetMapping(value = "/shipper-account")
+	public String shipperAccount(Model model, HttpSession session) {
+		try {
+			User shipper = (User) session.getAttribute("SHIPPER");
+			if (shipper == null) {
+				model.addAttribute("message", "You are not logged in yet!");
+				return "404";
+			} else {
+				model.addAttribute("shipper", shipper);
+				return "shipper_account";
+			}
+		} catch (Exception e) {
+			model.addAttribute("message", e.getMessage());
+			return "404";
+		}
+	}
+
+	@GetMapping(value = "/shipper-take-order")
+	public String shipperTakeOrder(Long id, HttpSession session, Model model) {
+		try {
+			User shipper = (User) session.getAttribute("SHIPPER");
+			orderService.shipperTakeOrder(shipper, id);
+			return "redirect:/sStore/shipper-available-orders";
+		} catch (Exception e) {
+			model.addAttribute("message", e.getMessage());
+			return "404";
+		}
+	}
+
+	@GetMapping(value = "/shipper-delivered-order")
+	public String shipperDeliveredOrder(Long id, HttpSession session, Model model) {
+		try {
+			User shipper = (User) session.getAttribute("SHIPPER");
+			orderService.shipperDeliveredOrder(shipper, id);
+			return "redirect:/sStore/shipper-my-orders";
+		} catch (Exception e) {
+			model.addAttribute("message", e.getMessage());
+			return "404";
+		}
 	}
 
 }

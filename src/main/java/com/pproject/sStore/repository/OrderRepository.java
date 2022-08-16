@@ -11,14 +11,17 @@ import com.pproject.sStore.model.Order;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    @Query("SELECT o FROM Order o WHERE o.adminVisible > 0")
-    List<Order> getAdminOrders();
+	@Query("SELECT o FROM Order o WHERE o.adminVisible > 0")
+	List<Order> getAdminOrders();
 
-    @Query("SELECT o FROM Order o WHERE o.status = 2 " +
-            "AND (lower(o.user.userName) LIKE lower(concat('%', ?1,'%')) " +
-            "OR o.user.phoneNumber LIKE ?1)")
-    Page<Order> getShipperOrders1(String search, Pageable pageable);
+	@Query("SELECT o FROM Order o WHERE o.status = 2 " +
+			"AND (lower(o.user.userName) LIKE lower(concat('%', ?1,'%')) " +
+			"OR o.user.phoneNumber LIKE ?1)")
+	Page<Order> getShipperOrders1(String search, Pageable pageable);
 
-    @Query("SELECT o FROM Order o WHERE o.shipper.id = ?1")
-    Page<Order> getShipperOrders2(Long s_id, Pageable pageable);
+	@Query("SELECT o FROM Order o WHERE (o.shipper.id = ?1 " +
+			"AND o.status = 3)" +
+			"AND (lower(o.user.userName) LIKE lower(concat('%', ?2,'%')) " +
+			"OR o.user.phoneNumber LIKE ?2)")
+	Page<Order> getShipperOrders2(Long s_id, String search, Pageable pageable);
 }

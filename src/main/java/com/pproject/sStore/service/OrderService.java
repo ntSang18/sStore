@@ -70,13 +70,41 @@ public class OrderService {
                     pageNum - 1,
                     PAGE_SIZE,
                     Sort.by("totalPrice").descending()));
-        } else if (sort  == 4) {
+        } else if (sort == 4) {
             return orderRepository.getShipperOrders1(search, PageRequest.of(
                     pageNum - 1,
                     PAGE_SIZE,
-                    Sort.by("createAt").ascending()));
+                    Sort.by("totalPrice").ascending()));
         } else {
             return orderRepository.getShipperOrders1(search, PageRequest.of(
+                    pageNum - 1,
+                    PAGE_SIZE));
+        }
+    }
+
+    public Page<Order> getShipOrders2(Long shipperId, int pageNum, String search, int sort) {
+        if (sort == 1) {
+            return orderRepository.getShipperOrders2(shipperId, search, PageRequest.of(
+                    pageNum - 1,
+                    PAGE_SIZE,
+                    Sort.by("createAt").descending()));
+        } else if (sort == 2) {
+            return orderRepository.getShipperOrders2(shipperId, search, PageRequest.of(
+                    pageNum - 1,
+                    PAGE_SIZE,
+                    Sort.by("createAt").ascending()));
+        } else if (sort == 3) {
+            return orderRepository.getShipperOrders2(shipperId, search, PageRequest.of(
+                    pageNum - 1,
+                    PAGE_SIZE,
+                    Sort.by("totalPrice").descending()));
+        } else if (sort == 4) {
+            return orderRepository.getShipperOrders2(shipperId, search, PageRequest.of(
+                    pageNum - 1,
+                    PAGE_SIZE,
+                    Sort.by("totalPrice").ascending()));
+        } else {
+            return orderRepository.getShipperOrders2(shipperId, search, PageRequest.of(
                     pageNum - 1,
                     PAGE_SIZE));
         }
@@ -181,4 +209,18 @@ public class OrderService {
         orderRepository.save(order);
     }
 
+    public void shipperTakeOrder(User shipper, Long oid) {
+        Order order = getOrderById(oid);
+        order.setShipper(shipper);
+        order.setStatus(3);
+        orderRepository.save(order);
+    }
+
+    public void shipperDeliveredOrder(User shipper, Long oid) {
+        Order order = getOrderById(oid);
+        if (order.getShipper().getId() == shipper.getId()) {
+            order.setStatus(4);
+            orderRepository.save(order);
+        }
+    }
 }

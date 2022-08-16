@@ -31,7 +31,9 @@
 						<div class="column col-sm-12">
 							<div class="list-group">
 								<span class="list-group-item">
-									<strong>Nguyen Thanh Sang</strong>
+									<strong th:text="${shipper.userName}"
+										>Nguyen Thanh Sang</strong
+									>
 								</span>
 								<a href="#" class="list-group-item long-value"
 									>&nbsp;&nbsp;&nbsp;&nbsp;Available Orders</a
@@ -54,7 +56,10 @@
 										<div class="col-sm-4 control-label">
 											<label>Name</label>
 										</div>
-										<div class="col-sm-8 control-field">
+										<div
+											class="col-sm-8 control-field"
+											th:text="${shipper.userName}"
+										>
 											Nguyen Thanh Sang
 										</div>
 									</div>
@@ -70,9 +75,13 @@
 												id="email"
 												type="email"
 												class="form-control"
+												th:value="${shipper.email}"
 												disabled
 											/>
-											<i class="bx bx-check-square"></i>
+											<i
+												id="change-email"
+												class="bx bx-edit"
+											></i>
 										</div>
 									</div>
 									<div class="row">
@@ -89,9 +98,13 @@
 												id="phoneNumber"
 												type="text"
 												class="form-control"
+												th:value="${shipper.phoneNumber}"
 												disabled
 											/>
-											<i class="bx bx-edit"></i>
+											<i
+												id="change-phone"
+												class="bx bx-edit"
+											></i>
 										</div>
 									</div>
 									<div class="catalog">
@@ -105,7 +118,11 @@
 										<div class="col-sm-4 control-label">
 											<label>Province</label>
 										</div>
-										<div class="col-sm-8 control-field">
+										<div
+											id="display-province"
+											class="col-sm-8 control-field"
+											th:text="${shipper.address.province}"
+										>
 											Quang Nam
 										</div>
 									</div>
@@ -115,7 +132,11 @@
 												>District</label
 											>
 										</div>
-										<div class="col-sm-8 control-field">
+										<div
+											id="display-district"
+											class="col-sm-8 control-field"
+											th:text="${shipper.address.district}"
+										>
 											Dien Ban
 										</div>
 									</div>
@@ -123,7 +144,11 @@
 										<div class="col-sm-4 control-label">
 											<label for="province">Ward</label>
 										</div>
-										<div class="col-sm-8 control-field">
+										<div
+											id="display-ward"
+											class="col-sm-8 control-field"
+											th:text="${shipper.address.ward}"
+										>
 											Dien An
 										</div>
 									</div>
@@ -133,7 +158,11 @@
 												>Address</label
 											>
 										</div>
-										<div class="col-sm-8 control-field">
+										<div
+											id="display-detailAddress"
+											class="col-sm-8 control-field"
+											th:text="${shipper.address.detailAddress}"
+										>
 											Phong Nhi
 										</div>
 									</div>
@@ -154,7 +183,10 @@
 											>
 										</li>
 										<li class="list-group-item">
-											<a href="#">Logout</a>
+											<a
+												th:href="@{/sStore/logout(type=3)}"
+												>Logout</a
+											>
 										</li>
 										<li class="list-group-item">
 											<a href="#">Delete Account</a>
@@ -187,65 +219,86 @@
 							aria-label="Close"
 						></button>
 					</div>
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-sm-3 control-label">
-								<label for="province">Province</label>
+					<form
+						th:action="@{/sStore/change-address}"
+						method="post"
+						id="form-address"
+					>
+						<div class="modal-body">
+							<input name="type" type="number" value="3" hidden />
+							<div class="row">
+								<div class="col-sm-3 control-label">
+									<label for="province">Province</label>
+								</div>
+								<div class="col-sm-9 control-field">
+									<select
+										name="province"
+										id="province"
+										class="form-select province"
+									>
+										<option value="">
+											-- Select Province --
+										</option>
+									</select>
+								</div>
 							</div>
-							<div class="col-sm-9 control-field">
-								<select
-									name="province"
-									id="province"
-									class="form-select province"
-								></select>
+							<div class="row">
+								<div class="col-sm-3 control-label">
+									<label for="district">District</label>
+								</div>
+								<div class="col-sm-9 control-field">
+									<select
+										name="district"
+										id="district"
+										class="form-select district"
+									>
+										<option value="">
+											-- Select District --
+										</option>
+									</select>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-3 control-label">
+									<label for="ward">Ward</label>
+								</div>
+								<div class="col-sm-9 control-field">
+									<select
+										name="ward"
+										id="ward"
+										class="form-select ward"
+									>
+										<option value="">
+											-- Select Ward --
+										</option>
+									</select>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-3 control-label">
+									<label for="detailAddress"
+										>Detail Address</label
+									>
+								</div>
+								<div class="col-sm-9 control-field">
+									<input
+										type="text"
+										name="detailAddress"
+										id="detailAddress"
+										class="form-control detailAddress"
+									/>
+								</div>
 							</div>
 						</div>
-						<div class="row">
-							<div class="col-sm-3 control-label">
-								<label for="district">District</label>
-							</div>
-							<div class="col-sm-9 control-field">
-								<select
-									name="district"
-									id="district"
-									class="form-select district"
-								></select>
-							</div>
+						<div class="modal-footer">
+							<button type="button" data-bs-dismiss="modal">
+								Close
+							</button>
+							<button type="submit" class="btn1">
+								Save changes
+							</button>
 						</div>
-						<div class="row">
-							<div class="col-sm-3 control-label">
-								<label for="ward">Ward</label>
-							</div>
-							<div class="col-sm-9 control-field">
-								<select
-									name="ward"
-									id="ward"
-									class="form-select ward"
-								></select>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-sm-3 control-label">
-								<label for="detailAddress"
-									>Detail Address</label
-								>
-							</div>
-							<div class="col-sm-9 control-field">
-								<input
-									type="text"
-									name="detailAddress"
-									id="detailAddress"
-									class="form-control detailAddress"
-								/>
-							</div>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" data-bs-dismiss="modal">
-							Close
-						</button>
-						<button type="button">Save changes</button>
-					</div>
+					</form>
 				</div>
 			</div>
 		</div>
@@ -318,7 +371,13 @@
 						<button type="button" data-bs-dismiss="modal">
 							Close
 						</button>
-						<button type="button">Save changes</button>
+						<button
+							id="save-change-pass"
+							type="button"
+							class="btn1"
+						>
+							Save changes
+						</button>
 					</div>
 				</div>
 			</div>

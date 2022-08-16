@@ -32,273 +32,394 @@
 			<p>Manager your Information and history Orders</p>
 		</section>
 
-		<section id="user-information" class="section-p1">
-			<div class="title">
-				<h2>Your Information</h2>
-				<p>We'll never share your information with anyone else.</p>
-			</div>
-			<div class="container">
+		<section id="user-information">
+			<div class="container-fluid">
 				<div class="row">
-					<form action="" class="col-lg-9" id="form-edit-user">
-						<fieldset id="form-user-info" disabled>
-							<div class="row">
-								<div class="col-lg-6">
-									<label for="userName" class="form-label"
-										>User name</label
+					<div class="column col-sm-3" style="padding-right: 50px">
+						<div class="row">
+							<div class="column col-sm-12">
+								<div class="list-group">
+									<span class="list-group-item">
+										<strong th:text="${user.userName}"
+											>Nguyen Thanh Sang</strong
+										>
+									</span>
+									<a
+										th:href="@{/sStore/orders}"
+										class="list-group-item"
+										>&nbsp;&nbsp;&nbsp;&nbsp;My Orders</a
 									>
-									<input
-										type="text"
-										class="form-control"
-										id="userName"
-										name="userName"
-										th:value="${user.userName}"
-									/>
+									<span class="list-group-divider"></span>
 								</div>
-								<div class="col-lg-6">
-									<label for="password" class="form-label"
-										>Password</label
-									>
-									<div class="input-group show-hide-pass">
-										<input
-											type="password"
-											class="form-control"
-											id="password"
-											name="password"
-											th:value="${user.password}"
-										/>
-										<a href="#" class="input-group-text"
-											><i class="bx bx-hide"></i
-										></a>
+							</div>
+						</div>
+					</div>
+					<div class="column col-sm-9 info">
+						<h1>Your Information</h1>
+						<p>
+							We'll never share your information with anyone else.
+						</p>
+						<div class="row">
+							<div class="column col-sm-6">
+								<div class="panel">
+									<div class="panel-body">
+										<div class="row">
+											<div class="col-sm-4 control-label">
+												<label>Name</label>
+											</div>
+											<div
+												class="column col-sm-8 control-field"
+												th:text="${user.userName}"
+											>
+												Nguyen Thanh Sang
+											</div>
+										</div>
+										<div class="row">
+											<div
+												class="column col-sm-4 control-label"
+											>
+												<label for="email">Email</label>
+											</div>
+											<div
+												class="column col-sm-8 control-field input"
+											>
+												<input
+													name="email"
+													id="email"
+													type="email"
+													class="form-control modify"
+													th:value="${user.email}"
+													disabled
+												/>
+												<i
+													id="change-email"
+													class="bx bx-edit"
+												></i>
+											</div>
+										</div>
+										<div class="row">
+											<div
+												class="column col-sm-4 control-label"
+											>
+												<label for="phoneNumber"
+													>Phone number</label
+												>
+											</div>
+											<div
+												class="column col-sm-8 control-field input"
+											>
+												<input
+													name="phoneNumber"
+													id="phoneNumber"
+													type="text"
+													class="form-control modify"
+													th:value="${user.phoneNumber}"
+													disabled
+												/>
+												<i
+													id="change-phone"
+													class="bx bx-edit"
+												></i>
+											</div>
+										</div>
+										<div class="catalog">
+											Address
+											<a id="change-address" href="#"
+												><i class="bx bx-edit"></i>
+												Change</a
+											>
+										</div>
+										<div class="row">
+											<div
+												class="column col-sm-4 control-label"
+											>
+												<label>Province</label>
+											</div>
+											<div
+												id="display-province"
+												class="column col-sm-8 control-field"
+												th:text="${user.address.province}"
+											>
+												Quang Nam
+											</div>
+										</div>
+										<div class="row">
+											<div
+												class="column col-sm-4 control-label"
+											>
+												<label for="province"
+													>District</label
+												>
+											</div>
+											<div
+												id="display-district"
+												class="column col-sm-8 control-field"
+												th:text="${user.address.district}"
+											>
+												Dien Ban
+											</div>
+										</div>
+										<div class="row">
+											<div
+												class="column col-sm-4 control-label"
+											>
+												<label for="province"
+													>Ward</label
+												>
+											</div>
+											<div
+												id="display-ward"
+												class="column col-sm-8 control-field"
+												th:text="${user.address.ward}"
+											>
+												Dien An
+											</div>
+										</div>
+										<div class="row">
+											<div
+												class="column col-sm-4 control-label"
+											>
+												<label for="province"
+													>Address</label
+												>
+											</div>
+											<div
+												id="display-detailAddress"
+												class="column col-sm-8 control-field"
+												th:text="${user.address.detailAddress}"
+											>
+												Phong Nhi
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
-							<div class="row my-4">
-								<div class="col-lg-6">
-									<label for="email" class="form-label"
-										>Email address</label
-									>
-									<input
-										type="email"
-										class="form-control"
-										id="email"
-										name="email"
-										th:value="${user.email}"
-									/>
-								</div>
-								<div class="col-lg-6">
-									<label for="phoneNumber" class="form-label"
-										>Phone number</label
-									>
-									<input
-										type="text"
-										class="form-control"
-										id="phoneNumber"
-										name="phoneNumber"
-										th:value="${user.phoneNumber}"
-									/>
-								</div>
-							</div>
-							<div class="row my-4">
-								<div class="col-lg-4">
-									<label for="province1" class="form-label"
-										>Province</label
-									>
-									<select
-										name="province"
-										id="province1"
-										class="form-select province"
-										th:data-province="${user.address.province}"
-									></select>
-								</div>
-								<div class="col-lg-4">
-									<label for="district1" class="form-label"
-										>District</label
-									>
-									<select
-										name="district"
-										id="district1"
-										class="form-select district"
-										th:data-district="${user.address.district}"
-									></select>
-								</div>
-								<div class="col-lg-4">
-									<label for="ward1" class="form-label"
-										>Ward</label
-									>
-									<select
-										name="ward"
-										id="ward1"
-										class="form-select ward"
-										th:data-ward="${user.address.ward}"
-									></select>
+
+							<div class="col-sm-4">
+								<div class="panel">
+									<div class="panel-body">
+										<ul class="list-group">
+											<li class="list-group-item">
+												<a
+													href="#"
+													data-bs-toggle="modal"
+													data-bs-target="#change-password-modal"
+													>Password</a
+												>
+											</li>
+											<li class="list-group-item">
+												<a
+													th:href="@{/sStore/logout(type=1)}"
+													>Logout</a
+												>
+											</li>
+											<li class="list-group-item">
+												<a href="#">Delete Account</a>
+											</li>
+										</ul>
+									</div>
 								</div>
 							</div>
-							<div class="row my-4">
-								<div class="col-lg-12">
-									<label
-										for="detailAddress"
-										class="form-label"
-										>Detail address</label
-									>
-									<input
-										type="text"
-										class="form-control"
-										id="detailAddress"
-										name="detailAddress"
-										th:value="${user.address.detailAddress}"
-									/>
-								</div>
-							</div>
-						</fieldset>
-					</form>
-					<div class="col-lg-3 d-flex flex-column align-items-center">
-						<button class="edit" id="btn-edit-save">
-							Edit Information
-						</button>
-						<a class="btn2" th:href="@{/sStore/logout}">Logout</a>
+						</div>
 					</div>
 				</div>
 			</div>
-		</section>
-
-		<section id="orders" class="section-p1">
-			<div class="title">
-				<h2>Your Orders</h2>
-				<p>Manager your orders.</p>
-			</div>
-			<table width="100%">
-				<thead>
-					<tr>
-						<td>Remove</td>
-						<td>Date Order</td>
-						<td>Total Quantity</td>
-						<td>Total Price</td>
-						<td>Status</td>
-					</tr>
-				</thead>
-				<tbody>
-					<tr
-						th:each="order : ${orders}"
-						class="order"
-						th:data-id="${order.id}"
-					>
-						<td>
-							<a class="del-cart-item" href="#"
-								><i class="bx bx-x-circle"></i
-							></a>
-						</td>
-						<td th:text="${order.createAt}"></td>
-						<td th:text="${order.totalQuantity}"></td>
-						<td class="price" th:text="${order.totalPrice}">
-							$118.19
-						</td>
-						<td th:if="${order.status == 1}">
-							<span class="status pending"> Pending </span>
-						</td>
-						<td th:if="${order.status == 2 || order.status == 3}">
-							<span class="status process"> Process </span>
-						</td>
-						<td th:if="${order.status == 4}">
-							<span class="status completed"> Completed </span>
-						</td>
-					</tr>
-				</tbody>
-			</table>
 		</section>
 
 		<footer th:replace="index :: footer"></footer>
 
+		<!-- Modal -->
+		<!-- Change Address Modal -->
 		<div
 			class="modal fade"
-			id="orders-view-order"
+			id="change-address-modal"
 			tabindex="-1"
-			aria-labelledby="orders-view-order"
-			aria-hidden="true"
-		>
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content p-3 view-order">
-					<div class="order-title">
-						Order Details
-						<span id="total-quantity">(5 products)</span>
-					</div>
-					<div class="order-items-list"></div>
-				</div>
-			</div>
-		</div>
-
-		<div
-			class="modal fade"
-			id="review-order-modal"
-			tabindex="-1"
-			aria-labelledby="review-order-modal"
+			aria-labelledby="change-address-modal"
 			aria-hidden="true"
 		>
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">
-							Rating Product
-						</h5>
+						<h5 class="modal-title">Change Address</h5>
+						<button
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"
+						></button>
 					</div>
-					<div class="modal-body">
-						<div class="star-widget">
-							<input
-								type="radio"
-								name="rate"
-								id="rate-5"
-								value="5"
-							/>
-							<label for="rate-5" class="bx bxs-star"></label>
-							<input
-								type="radio"
-								name="rate"
-								id="rate-4"
-								value="4"
-							/>
-							<label for="rate-4" class="bx bxs-star"></label>
-							<input
-								type="radio"
-								name="rate"
-								id="rate-3"
-								value="3"
-							/>
-							<label for="rate-3" class="bx bxs-star"></label>
-							<input
-								type="radio"
-								name="rate"
-								id="rate-2"
-								value="2"
-							/>
-							<label for="rate-2" class="bx bxs-star"></label>
-							<input
-								type="radio"
-								name="rate"
-								id="rate-1"
-								value="1"
-							/>
-							<label for="rate-1" class="bx bxs-star"></label>
-						</div>
-						<form action="#">
-							<header id="header-review">&nbsp;</header>
-							<div class="textarea">
-								<textarea
-									name="review"
-									cols="40"
-									placeholder="Describer your experience..."
-								></textarea>
+					<form
+						th:action="@{/sStore/change-address}"
+						method="post"
+						id="form-address"
+					>
+						<div class="modal-body">
+							<input name="type" type="number" value="1" hidden />
+							<div class="row">
+								<div class="col-sm-3 control-label">
+									<label for="province">Province</label>
+								</div>
+								<div class="col-sm-9 control-field">
+									<select
+										name="province"
+										id="province"
+										class="form-select province modify"
+									>
+										<option value="">
+											-- Select Province --
+										</option>
+									</select>
+								</div>
 							</div>
-						</form>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="post">Post</button>
-					</div>
+							<div class="row">
+								<div class="col-sm-3 control-label">
+									<label for="district">District</label>
+								</div>
+								<div class="col-sm-9 control-field">
+									<select
+										name="district"
+										id="district"
+										class="form-select district modify"
+									>
+										<option value="">
+											-- Select District --
+										</option>
+									</select>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-3 control-label">
+									<label for="ward">Ward</label>
+								</div>
+								<div class="col-sm-9 control-field">
+									<select
+										name="ward"
+										id="ward"
+										class="form-select ward modify"
+									>
+										<option value="">
+											-- Select Ward --
+										</option>
+									</select>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-3 control-label">
+									<label for="detailAddress"
+										>Detail Address</label
+									>
+								</div>
+								<div class="col-sm-9 control-field">
+									<input
+										type="text"
+										name="detailAddress"
+										id="detailAddress"
+										class="form-control detailAddress modify"
+									/>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button
+								type="button"
+								data-bs-dismiss="modal"
+								class="btn-exit"
+							>
+								Close
+							</button>
+							<button type="submit" class="btn-save">
+								Save changes
+							</button>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
 
-		<div th:replace="index :: loginModal"></div>
-
-		<div th:replace="index :: registerModal"></div>
+		<!-- Change Password modal -->
+		<div
+			class="modal fade"
+			id="change-password-modal"
+			tabindex="-1"
+			aria-labelledby="change-password-modal"
+			aria-hidden="true"
+		>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Change Password</h5>
+						<button
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"
+						></button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-sm-3 control-label">
+								<label for="current-password"
+									>Current Password</label
+								>
+							</div>
+							<div class="col-sm-9 control-field input">
+								<input
+									type="password"
+									id="current-password"
+									class="form-control modify"
+								/>
+								<i id="vision1" class="bx bx-hide"></i>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-3 control-label">
+								<label for="new-password">New Password</label>
+							</div>
+							<div class="col-sm-9 control-field input">
+								<input
+									type="password"
+									name="password"
+									id="new-password"
+									class="form-control modify"
+								/>
+								<i class="bx bx-hide" id="vision2"></i>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-3 control-label">
+								<label for="current-password"
+									>Repeat Password</label
+								>
+							</div>
+							<div class="col-sm-9 control-field input">
+								<input
+									type="password"
+									id="repeat-password"
+									class="form-control modify"
+								/>
+								<i id="vision3" class="bx bx-hide"></i>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button
+							type="button"
+							data-bs-dismiss="modal"
+							class="btn-exit"
+						>
+							Close
+						</button>
+						<button
+							id="save-change-pass"
+							type="button"
+							class="btn-save"
+						>
+							Save changes
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</body>
 	<!-- script -->
 	<script src="../static/js/script.js"></script>

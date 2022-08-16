@@ -10,11 +10,11 @@ import com.pproject.sStore.model.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-	@Query("SELECT u FROM User u WHERE u.type = 1 OR u.type = 3")
+	@Query("SELECT u FROM User u")
 	List<User> getAllUser();
 
-	@Query("SELECT u FROM User u WHERE u.email = ?1 AND u.password = ?2")
-	Optional<User> login(String email, String password);
+	@Query("SELECT u FROM User u WHERE u.type = 1 OR u.type = 3")
+	List<User> getAllClientAndShipper();
 
 	@Query("SELECT u FROM User u WHERE u.email = ?1")
 	Optional<User> findUserByEmail(String email);
