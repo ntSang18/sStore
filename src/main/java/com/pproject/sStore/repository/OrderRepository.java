@@ -24,4 +24,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 			"AND (lower(o.user.userName) LIKE lower(concat('%', ?2,'%')) " +
 			"OR o.user.phoneNumber LIKE ?2)")
 	Page<Order> getShipperOrders2(Long s_id, String search, Pageable pageable);
+
+	@Query("SELECT COUNT(o) FROM Order o WHERE o.status = 1")
+	Integer countNewOrder();
 }

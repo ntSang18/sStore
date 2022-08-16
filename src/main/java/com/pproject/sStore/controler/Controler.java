@@ -388,6 +388,14 @@ public class Controler {
 				model.addAttribute("message", "You are not logged in yet!");
 				return "404";
 			} else {
+				List<Order> orders = orderService.getRecentOrders();
+				int countOrders = orderService.countNewOrder();
+				int countCustomers = userService.countCustomer();
+				double totalSales = orderService.totalSalesByMonth();
+				model.addAttribute("orders", orders);
+				model.addAttribute("countOrders", countOrders);
+				model.addAttribute("countCustomers", countCustomers);
+				model.addAttribute("totalSales", totalSales);
 				return "admin_dashboard";
 			}
 		} catch (Exception e) {

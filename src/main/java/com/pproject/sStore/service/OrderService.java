@@ -50,6 +50,17 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
+    public List<Order> getRecentOrders() {
+        List<Order> orders = getAdminOrders();
+        orders.sort((Order o1, Order o2) -> {
+            return o1.getCreateAt().compareTo(o2.getCreateAt());
+        });
+        if (orders.size() < 5) {
+            return orders;
+        }
+        return orders.subList(0, 5);
+    }
+
     public List<Order> getAdminOrders() {
         return orderRepository.getAdminOrders();
     }
@@ -114,6 +125,22 @@ public class OrderService {
         User user = userRepository.findById(uid)
                 .orElseThrow(() -> new IllegalStateException("User by id " + uid + " does not exits"));
         return user.getOrders();
+    }
+
+    public int countNewOrder() {
+        return orderRepository.countNewOrder();
+    }
+
+    public Double totalSalesByMonth() {
+        LocalDate currentDate = LocalDate.now();
+        int currentMonth = currentDate.getMonthValue();
+        double totalSales = 0L;
+        for (Order o : getAllOrder()) {
+            if (o.getStatus() > 1 && o.getCreateAt().getMonthValue() == currentMonth) {
+                totalSales += o.getTotalPrice();
+            }
+        }
+        return totalSales;
     }
 
     public void newOrder(Long userId) {

@@ -2,17 +2,20 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- jQuery -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 		<link
 			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
 			rel="stylesheet"
 		/>
-		<!-- Boxicons -->
+		<!-- box icon -->
 		<link
 			href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css"
 			rel="stylesheet"
 		/>
-		<!-- My CSS -->
+		<script src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"></script>
 		<link rel="stylesheet" href="../static/css/admin.css" />
 		<title>sStore | Admin</title>
 	</head>
@@ -63,7 +66,7 @@
 					</a>
 				</li>
 				<li>
-					<a href="#" class="logout">
+					<a th:href="@{/sStore/logout(type=2)}" class="logout">
 						<i class="bx bxs-log-out-circle"></i>
 						<span class="text">Logout</span>
 					</a>
@@ -93,7 +96,7 @@
 					<span class="num">8</span>
 				</a>
 				<a href="#" class="profile">
-					<img src="img/people.png" />
+					<img src="../static/image/people/avt.jpg" />
 				</a>
 			</nav>
 			<!-- NAVBAR -->
@@ -115,21 +118,21 @@
 					<li>
 						<i class="bx bxs-calendar-check"></i>
 						<span class="text">
-							<h3>1020</h3>
+							<h3 th:text="${countOrders}">1020</h3>
 							<p>New Order</p>
 						</span>
 					</li>
 					<li>
 						<i class="bx bxs-group"></i>
 						<span class="text">
-							<h3>2834</h3>
-							<p>Visitors</p>
+							<h3 th:text="${countCustomers}">2834</h3>
+							<p>Customers</p>
 						</span>
 					</li>
 					<li>
 						<i class="bx bxs-dollar-circle"></i>
 						<span class="text">
-							<h3>$2543</h3>
+							<h3 th:text="${totalSales}" class="price">$2543</h3>
 							<p>Total Sales</p>
 						</span>
 					</li>
@@ -151,64 +154,31 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
+								<tr th:each="order : ${orders}">
 									<td>
-										<img src="img/people.png" />
-										<p>John Doe</p>
+										<p th:text="${order.user.userName}">
+											John Doe
+										</p>
 									</td>
-									<td>01-10-2021</td>
-									<td>
-										<span class="status completed"
-											>Completed</span
-										>
+									<td th:text="${order.createAt}">
+										01-10-2021
 									</td>
-								</tr>
-								<tr>
-									<td>
-										<img src="img/people.png" />
-										<p>John Doe</p>
+									<td th:if="${order.status == 1}">
+										<span class="status pending">
+											Pending
+										</span>
 									</td>
-									<td>01-10-2021</td>
-									<td>
-										<span class="status pending"
-											>Pending</span
-										>
+									<td
+										th:if="${order.status == 2 or order.status == 3}"
+									>
+										<span class="status process">
+											Process
+										</span>
 									</td>
-								</tr>
-								<tr>
-									<td>
-										<img src="img/people.png" />
-										<p>John Doe</p>
-									</td>
-									<td>01-10-2021</td>
-									<td>
-										<span class="status process"
-											>Process</span
-										>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<img src="img/people.png" />
-										<p>John Doe</p>
-									</td>
-									<td>01-10-2021</td>
-									<td>
-										<span class="status pending"
-											>Pending</span
-										>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<img src="img/people.png" />
-										<p>John Doe</p>
-									</td>
-									<td>01-10-2021</td>
-									<td>
-										<span class="status completed"
-											>Completed</span
-										>
+									<td th:if="${order.status == 4}">
+										<span class="status completed">
+											Completed
+										</span>
 									</td>
 								</tr>
 							</tbody>
@@ -248,6 +218,8 @@
 			<!-- MAIN -->
 		</section>
 		<!-- CONTENT -->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+		<script src="../static/js/ajax.js"></script>
 		<script src="../static/js/admin.js"></script>
 		<script>
 			// Slide bar
