@@ -530,6 +530,52 @@ $(document).ready(function () {
 	});
 
 	//------------------------------Cart---------------------------------//
+
+	$("#new-mess").click(function (event) {
+		event.preventDefault();
+		var href = $("#form-new-mess").attr("action");
+		var senderName = $("#form-new-mess input[name='senderName']").val();
+		var senderEmail = $("#form-new-mess input[name='senderEmail']").val();
+		var subject = $("#form-new-mess input[name='subject']").val();
+		var mess = $("#form-new-mess textarea[name='mess']").val();
+		if (
+			!senderName ||
+			senderName.length === 0 ||
+			!senderEmail ||
+			senderEmail.length === 0 ||
+			!subject ||
+			subject.length === 0 ||
+			!mess ||
+			MIDIMessageEvent.length === 0
+		) {
+			Toast.fire({
+				icon: "warning",
+				title: "Information cannot be empty!",
+			});
+			return;
+		}
+		var data = {
+			senderName: senderName,
+			senderEmail: senderEmail,
+			subject: subject,
+			mess: mess,
+		};
+		$.post(href, data)
+			.done(function (data) {
+				Toast.fire({
+					icon: "success",
+					title: data.message,
+				});
+			})
+			.fail(function () {
+				Toast.fire({
+					icon: "error",
+					title: "Error",
+				});
+			});
+	});
+
+	//------------------------------Cart---------------------------------//
 	$(".del-cart-item").click(function (event) {
 		event.preventDefault();
 		var href = $(this).attr("href");

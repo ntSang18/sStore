@@ -51,20 +51,56 @@
 		</section>
 
 		<section id="form-details">
-			<form action="">
+			<form th:action="@{/sStore/new-message}" id="form-new-mess">
 				<span>LEAVE A MESSAGE</span>
 				<h2>We love to hear from you</h2>
-				<input type="text" placeholder="Your Name" />
-				<input type="text" placeholder="E-mail" />
-				<input type="text" placeholder="Subject" />
+				<th:block th:if="${session.USER}">
+					<input
+						type="text"
+						placeholder="Your Name"
+						required
+						name="senderName"
+						th:value="${session.USER.userName}"
+					/>
+					<input
+						type="text"
+						placeholder="E-mail"
+						required
+						name="senderEmail"
+						th:value="${session.USER.email}"
+					/>
+				</th:block>
+				<th:block th:unless="${session.USER}">
+					<input
+						type="text"
+						placeholder="Your Name"
+						required
+						name="senderName"
+					/>
+					<input
+						type="text"
+						placeholder="E-mail"
+						required
+						name="senderEmail"
+					/>
+				</th:block>
+				<input
+					type="text"
+					placeholder="Subject"
+					required
+					name="subject"
+				/>
 				<textarea
-					name=""
+					name="mess"
 					id=""
 					cols="30"
 					rows="10"
 					placeholder="Your Message"
+					required
 				></textarea>
-				<button type="submit" class="normal">Submit</button>
+				<button type="submit" id="new-mess" class="normal">
+					Submit
+				</button>
 			</form>
 
 			<div class="people">

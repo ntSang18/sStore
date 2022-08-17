@@ -2,6 +2,7 @@ package com.pproject.sStore.controler;
 
 import com.pproject.sStore.model.*;
 import com.pproject.sStore.service.CartService;
+import com.pproject.sStore.service.MessageService;
 import com.pproject.sStore.service.OrderService;
 import com.pproject.sStore.service.ProductService;
 import com.pproject.sStore.service.UserService;
@@ -28,14 +29,20 @@ public class Controler {
 	private final ProductService productService;
 	private final CartService cartService;
 	private final OrderService orderService;
+	private final MessageService messageService;
 
 	@Autowired
-	public Controler(UserService userService, ProductService productService, CartService cartService,
-			OrderService orderService) {
+	public Controler(
+			UserService userService,
+			ProductService productService,
+			CartService cartService,
+			OrderService orderService,
+			MessageService messageService) {
 		this.userService = userService;
 		this.productService = productService;
 		this.cartService = cartService;
 		this.orderService = orderService;
+		this.messageService = messageService;
 	}
 
 	@GetMapping
@@ -364,6 +371,14 @@ public class Controler {
 			model.addAttribute("message", e.getMessage());
 			return "404";
 		}
+	}
+
+	@PostMapping(value = "/new-message")
+	@ResponseBody
+	public ResponseEntity<Object> newMessage(Message message) {
+		Message mess = messageService.newMessage(message);
+		return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+				"message", "Your message has been sent"));
 	}
 
 	@GetMapping(value = "/newOrder")
